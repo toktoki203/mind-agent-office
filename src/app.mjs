@@ -1,11 +1,13 @@
 import { AGENTS, STATUSES, PRIORITIES, getAgent, getStatus, seedWorkspace } from './data.mjs';
 import { STORAGE_KEY, readWorkspace, saveWorkspace, createTask, updateTask, moveTask, deleteTask, getStats, buildAgentPrompt } from './domain.mjs';
 import { avatarSvg } from './avatars.mjs';
+import { createRequestUI } from './request-ui.mjs';
 
 const icons = {
   dashboard: '<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
   board: '<rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="10" rx="2"/><path d="M14 18h7"/>',
   users: '<circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M17 5a3 3 0 0 1 0 6m2 9v-2a6 6 0 0 0-2-4.5"/>',
+  messages: '<path d="M4 5h16v12H9l-5 4V5z"/><path d="M8 10h8M8 14h5"/>',
   activity: '<path d="M4 5h16M4 12h16M4 19h16"/><circle cx="7" cy="5" r="2" fill="currentColor"/><circle cx="13" cy="12" r="2" fill="currentColor"/><circle cx="9" cy="19" r="2" fill="currentColor"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
@@ -51,6 +53,7 @@ const ui = { view: 'office', agentId: null, modalTaskId: null, modalAgentId: nul
 let toastTimeout;
 let dragTaskId = null;
 const app = document.getElementById('app');
+const requestUI = createRequestUI({ getWorkspace: () => workspace, persist, render, showToast });
 
 function persist(next) {
   workspace = next;
@@ -89,7 +92,7 @@ function sectionHeading(eyebrow, title, description = '') {
 }
 function sideBar(stats) {
   const menu = [
-    ['office', 'dashboard', 'Văn phòng'], ['board', 'board', 'Bảng nhiệm vụ'],
+    ['office', 'dashboard', 'Văn phòng'], ['requests', 'messages', 'Yêu cầu Agent'], ['board', 'board', 'Bảng nhiệm vụ'],
     ['agents', 'users', 'Đội ngũ Agent'], ['activity', 'activity', 'Nhật ký hoạt động']
   ];
   return `<aside class="sidebar">
@@ -99,15 +102,15 @@ function sideBar(stats) {
     <div class="side-divider"></div>
     <div class="side-section-label">YOUR CREW <span>05</span></div>
     <div class="side-agents">${AGENTS.map(agent => `<button class="mini-agent" data-action="agent" data-id="${agent.id}"><span class="mini-agent-avatar" style="background:${agent.tint}">${avatarSvg(agent, 'mini')}</span><span class="mini-agent-name">${esc(agent.name)}<small>${esc(agent.group)}</small></span><span class="mini-agent-status" aria-label="Có hồ sơ Agent"></span></button>`).join('')}</div>
-    <div class="sidebar-bottom"><div class="demo-note"><span class="demo-note-icon">${icon('spark', 18)}</span><strong>Local Demo Mode</strong><p>Đây là bản quản lý công việc. Agent chưa tự chạy AI.</p></div><button class="sidebar-help" data-action="nav" data-view="about">${icon('gear', 17)} Cấu hình & lộ trình ${icon('chevron', 15)}</button></div>
+    <div class="sidebar-bottom"><div class="demo-note"><span class="demo-note-icon">${icon('spark', 18)}</span><strong>Local Demo Mode</strong><p>Có hộp yêu cầu offline. AI thật cần cấu hình API bảo mật.</p></div><button class="sidebar-help" data-action="nav" data-view="about">${icon('gear', 17)} Cấu hình & lộ trình ${icon('chevron', 15)}</button></div>
   </aside>`;
 }
 function topbar() {
-  const labels = { office: 'Văn phòng', board: 'Bảng nhiệm vụ', agents: 'Đội ngũ Agent', activity: 'Nhật ký hoạt động', about: 'Giới thiệu MVP' };
+  const labels = { office: 'Văn phòng', requests: 'Yêu cầu Agent', board: 'Bảng nhiệm vụ', agents: 'Đội ngũ Agent', activity: 'Nhật ký hoạt động', about: 'Giới thiệu MVP' };
   return `<header class="topbar"><div class="breadcrumbs"><span>Workspace</span>${icon('chevron', 14)}<strong>${labels[ui.view] || 'Văn phòng'}</strong></div><div class="top-actions"><span class="date-chip">${icon('clock', 15)} ${esc(dateLabel())}</span><span class="system-chip"><span></span> Local MVP</span><button class="btn btn-primary btn-sm" data-action="new-task">${icon('plus', 17)} <span>Tạo nhiệm vụ</span></button></div></header>`;
 }
 function mobileNav() {
-  return `<nav class="mobile-nav" aria-label="Điều hướng di động">${[['office', 'dashboard', 'Văn phòng'], ['board', 'board', 'Nhiệm vụ'], ['agents', 'users', 'Agents'], ['activity', 'activity', 'Lịch sử']].map(([route, sym, label]) => `<button data-action="nav" data-view="${route}" class="${ui.view === route ? 'active' : ''}">${icon(sym, 20)}<span>${label}</span></button>`).join('')}</nav>`;
+  return `<nav class="mobile-nav" aria-label="Điều hướng di động">${[['office', 'dashboard', 'Văn phòng'], ['requests', 'messages', 'Yêu cầu'], ['board', 'board', 'Nhiệm vụ'], ['agents', 'users', 'Agents'], ['activity', 'activity', 'Lịch sử']].map(([route, sym, label]) => `<button data-action="nav" data-view="${route}" class="${ui.view === route ? 'active' : ''}">${icon(sym, 20)}<span>${label}</span></button>`).join('')}</nav>`;
 }
 function statCards(stats) {
   const cards = [
@@ -141,14 +144,14 @@ function activityItem(entry, compact = false) {
 }
 function officeView(stats) {
   const active = workspace.tasks.filter(item => item.status !== 'done').sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0, 4);
-  return `<div class="page-intro"><div><div class="top-eyebrow">✦ MINDS AT WORK / YOUR AI HQ</div><h1>Chào mừng trở lại <span class="hello-wave">✳</span></h1><p>Văn phòng nhỏ, ý tưởng lớn. Mọi người và mọi đầu việc — gọn trong một nơi.</p></div><button class="btn btn-light" data-action="new-task">${icon('plus', 18)} Giao việc mới</button></div>
+  return `<div class="page-intro"><div><div class="top-eyebrow">✦ MINDS AT WORK / YOUR AI HQ</div><h1>Chào mừng trở lại <span class="hello-wave">✳</span></h1><p>Văn phòng nhỏ, ý tưởng lớn. Mọi người và mọi đầu việc — gọn trong một nơi.</p></div><button class="btn btn-light" data-action="nav" data-view="requests">${icon('messages', 18)} Gửi yêu cầu Agent</button></div>
     ${statCards(stats)}${officeScene()}
     <div class="bottom-grid"><section class="surface-panel"><div class="panel-heading"><div><span class="eyebrow">AT A GLANCE</span><h3>Nhiệm vụ gần đây</h3></div><button class="text-link" data-action="nav" data-view="board">Tất cả ${icon('arrow', 16)}</button></div><div class="task-preview-list">${active.length ? active.map(taskPreview).join('') : '<div class="empty-inline">Tất cả nhiệm vụ đã hoàn tất. Tuyệt vời!</div>'}</div></section>
     <section class="surface-panel activity-preview"><div class="panel-heading"><div><span class="eyebrow">WHAT’S HAPPENING</span><h3>Hoạt động mới</h3></div><button class="text-link" data-action="nav" data-view="activity">Xem thêm ${icon('arrow', 16)}</button></div><div class="timeline">${workspace.activities.slice(0, 4).map(entry => activityItem(entry, true)).join('') || '<p class="empty-inline">Chưa có hoạt động.</p>'}</div></section></div>`;
 }
 function taskCard(task) {
   const agent = getAgent(task.agentId);
-  return `<article class="task-card" draggable="true" data-drag-id="${esc(task.id)}" data-filter-agent="${esc(task.agentId)}" data-search="${esc((task.title + ' ' + task.description + ' ' + agent.name).toLowerCase())}"><div class="task-card-top">${priorityBadge(task.priority)}<button class="icon-btn task-card-edit" data-action="edit-task" data-id="${esc(task.id)}" aria-label="Chỉnh sửa ${esc(task.title)}">${icon('edit', 16)}</button></div><button class="task-card-title" data-action="edit-task" data-id="${esc(task.id)}">${esc(task.title)}</button><p>${esc(task.description || 'Chưa có mô tả.').slice(0, 170)}</p><div class="task-card-bottom">${agentBadge(task.agentId)}<span title="Cập nhật ${esc(fmtDate(task.updatedAt))}">${relTime(task.updatedAt)}</span></div><div class="task-card-actions"><select data-status-change data-id="${esc(task.id)}" aria-label="Trạng thái ${esc(task.title)}">${STATUSES.map(status => `<option value="${status.id}" ${status.id === task.status ? 'selected' : ''}>${esc(status.label)}</option>`).join('')}</select><button class="copy-mini" data-action="copy-prompt" data-id="${esc(task.id)}" title="Sao chép prompt cho ChatGPT">${icon('copy', 14)} Prompt</button></div></article>`;
+  return `<article class="task-card" draggable="true" data-drag-id="${esc(task.id)}" data-filter-agent="${esc(task.agentId)}" data-search="${esc((task.title + ' ' + task.description + ' ' + agent.name).toLowerCase())}"><div class="task-card-top">${priorityBadge(task.priority)}<button class="icon-btn task-card-edit" data-action="edit-task" data-id="${esc(task.id)}" aria-label="Chỉnh sửa ${esc(task.title)}">${icon('edit', 16)}</button></div><button class="task-card-title" data-action="edit-task" data-id="${esc(task.id)}">${esc(task.title)}</button><p>${esc(task.description || 'Chưa có mô tả.').slice(0, 170)}</p><div class="task-card-bottom">${agentBadge(task.agentId)}<span title="Cập nhật ${esc(fmtDate(task.updatedAt))}">${relTime(task.updatedAt)}</span></div><div class="task-card-actions"><select data-status-change data-id="${esc(task.id)}" aria-label="Trạng thái ${esc(task.title)}">${STATUSES.map(status => `<option value="${status.id}" ${status.id === task.status ? 'selected' : ''}>${esc(status.label)}</option>`).join('')}</select><button class="copy-mini" data-action="request-from-task" data-id="${esc(task.id)}" title="Mở hội thoại và gửi yêu cầu">${icon('messages', 14)} Yêu cầu</button></div></article>`;
 }
 function boardView() {
   return `<div class="subpage-header"><div><span class="eyebrow">MISSION CONTROL</span><h1>Bảng nhiệm vụ<span class="heading-spark"> ✳</span></h1><p>Phân công, kéo thả và cập nhật tiến độ theo thời gian thực trong trình duyệt của bạn.</p></div><button class="btn btn-primary" data-action="new-task">${icon('plus', 17)} Tạo nhiệm vụ</button></div>
@@ -162,13 +165,13 @@ function activityView() {
   return `<div class="subpage-header"><div><span class="eyebrow">ACTIVITY FEED</span><h1>Nhật ký hoạt động<span class="heading-spark"> ✳</span></h1><p>Mọi thay đổi nhiệm vụ được ghi nhận để bạn dễ theo dõi và kiểm tra.</p></div><button class="btn btn-outline" data-action="reset-demo">${icon('reset', 17)} Khôi phục dữ liệu mẫu</button></div><div class="activity-layout"><section class="surface-panel full-timeline"><div class="panel-heading"><div><span class="eyebrow">LATEST UPDATES</span><h3>${workspace.activities.length} sự kiện gần đây</h3></div><span class="quiet-tag">Lưu tối đa 250 sự kiện</span></div><div class="timeline">${workspace.activities.length ? workspace.activities.map(entry => activityItem(entry)).join('') : '<div class="empty-inline">Chưa có sự kiện nào.</div>'}</div></section><aside class="history-info"><div class="history-icon">${icon('document', 26)}</div><h3>Ghi lại mỗi thay đổi</h3><p>Khi bạn thêm, sửa, chuyển trạng thái hoặc xoá nhiệm vụ, nhật ký sẽ cập nhật ngay.</p><div class="history-hint">Chưa tích hợp nhật ký máy chủ, người thực hiện và kiểm toán đa người dùng. Các sự kiện mẫu chỉ minh hoạ giao diện.</div></aside></div>`;
 }
 function aboutView() {
-  return `<div class="subpage-header"><div><span class="eyebrow">PROJECT STATUS</span><h1>Về Agent Office V1.0</h1><p>Phiên bản MVP điều phối nhiệm vụ — nền móng cho đội ngũ AI hoạt động thực tế.</p></div></div><div class="about-grid"><section class="surface-panel"><div class="feature-symbol green">${icon('check', 27)}</div><h3>Đã có trong V1.0</h3><ul class="feature-list"><li>Văn phòng chibi với 5 nhân vật và hồ sơ vai trò</li><li>Tạo, sửa, phân công và xoá nhiệm vụ</li><li>Bảng Kanban có kéo thả, tìm kiếm và lọc</li><li>Nhật ký hoạt động khi thao tác</li><li>Lưu dữ liệu cục bộ, sao chép prompt cho ChatGPT</li><li>Thiết kế responsive cho desktop và mobile</li></ul></section><section class="surface-panel"><div class="feature-symbol amber">${icon('bolt', 27)}</div><h3>Sẽ cần ở V2.0</h3><ul class="feature-list"><li>AI runtime phía server, gọi model qua API</li><li>GitHub / Drive / Gmail tools và quyền truy cập</li><li>Phê duyệt trước khi Agent thực hiện hành động</li><li>Đăng nhập, cơ sở dữ liệu và đồng bộ nhiều thiết bị</li><li>Job queue, lịch tự động, lưu dấu vết thực thi</li><li>Bảo mật, giới hạn chi phí và giám sát</li></ul></section></div><div class="about-banner"><div><span class="eyebrow">HANDOFF READY</span><h3>Từ prototype đến agent thật</h3><p>Giao diện này không giả vờ tự nghiên cứu hoặc tự gửi email. Bạn có thể tạo prompt cho từng nhiệm vụ ngay hôm nay; khi có backend, chúng ta kết nối các công cụ theo vai trò.</p></div><button class="btn btn-primary" data-action="nav" data-view="board">Quản lý nhiệm vụ ${icon('arrow', 17)}</button></div>`;
+  return `<div class="subpage-header"><div><span class="eyebrow">PROJECT STATUS</span><h1>Về Agent Office V1.1</h1><p>Phiên bản MVP điều phối nhiệm vụ — nền móng cho đội ngũ AI hoạt động thực tế.</p></div></div><div class="about-grid"><section class="surface-panel"><div class="feature-symbol green">${icon('check', 27)}</div><h3>Đã có trong V1.0</h3><ul class="feature-list"><li>Văn phòng chibi với 5 nhân vật và hồ sơ vai trò</li><li>Tạo, sửa, phân công và xoá nhiệm vụ</li><li>Bảng Kanban có kéo thả, tìm kiếm và lọc</li><li>Nhật ký hoạt động khi thao tác</li><li>Gửi request, xem phản hồi offline theo quy tắc và sao chép prompt</li><li>Thiết kế responsive cho desktop và mobile</li></ul></section><section class="surface-panel"><div class="feature-symbol amber">${icon('bolt', 27)}</div><h3>Sẽ cần ở V2.0</h3><ul class="feature-list"><li>AI backend đã chuẩn bị; cần OPENAI_API_KEY và mã truy cập trên Vercel</li><li>GitHub / Drive / Gmail tools và quyền truy cập</li><li>Phê duyệt trước khi Agent thực hiện hành động</li><li>Đăng nhập, cơ sở dữ liệu và đồng bộ nhiều thiết bị</li><li>Job queue, lịch tự động, lưu dấu vết thực thi</li><li>Bảo mật, giới hạn chi phí và giám sát</li></ul></section></div><div class="about-banner"><div><span class="eyebrow">HANDOFF READY</span><h3>Từ prototype đến agent thật</h3><p>Offline chỉ trả về checklist theo quy tắc, không tự nghiên cứu hay gửi email. Sau khi cấu hình backend, các Agent có thể trả lời qua API, vẫn không tự thực hiện tác vụ bên ngoài.</p></div><button class="btn btn-primary" data-action="nav" data-view="board">Quản lý nhiệm vụ ${icon('arrow', 17)}</button></div>`;
 }
 function agentDrawer() {
   if (!ui.agentId) return '';
   const agent = getAgent(ui.agentId);
   const tasks = workspace.tasks.filter(task => task.agentId === agent.id && task.status !== 'done').sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-  return `<div class="drawer-overlay" data-action="close-agent"></div><aside class="agent-drawer" aria-label="Hồ sơ Agent ${esc(agent.name)}"><div class="drawer-head"><span class="eyebrow">AGENT PROFILE · 0${AGENTS.findIndex(item => item.id === agent.id) + 1}</span><button class="icon-btn" data-action="close-agent" aria-label="Đóng hồ sơ">${icon('close', 20)}</button></div><div class="drawer-hero" style="--drawer-accent:${agent.color};--drawer-tint:${agent.tint}"><div class="drawer-avatar">${avatarSvg(agent)}</div><span class="drawer-status"><span></span> Sẵn sàng nhận nhiệm vụ</span></div><div class="drawer-content"><span class="drawer-role">${esc(agent.title)}</span><h2>${esc(agent.name)} <span>✳</span></h2><p>${esc(agent.bio)}</p><h4>PHẠM VI CÔNG VIỆC</h4><ul class="capability-list">${agent.capabilities.map(capability => `<li>${icon('check', 15)} ${esc(capability)}</li>`).join('')}</ul><div class="drawer-task-head"><h4>NHIỆM VỤ ĐANG MỞ (${tasks.length})</h4></div><div class="drawer-tasks">${tasks.length ? tasks.slice(0, 5).map(task => `<button data-action="edit-task" data-id="${esc(task.id)}" class="drawer-task"><span>${esc(task.title)}</span>${statusPill(task.status)}</button>`).join('') : '<p class="empty-inline">Chưa có việc đang mở.</p>'}</div><button class="btn btn-primary drawer-assign" data-action="new-task-agent" data-id="${agent.id}">${icon('plus', 17)} Giao việc cho ${esc(agent.name)}</button><p class="drawer-footnote">Agent hiện có hồ sơ và prompt vai trò, chưa kết nối AI API.</p></div></aside>`;
+  return `<div class="drawer-overlay" data-action="close-agent"></div><aside class="agent-drawer" aria-label="Hồ sơ Agent ${esc(agent.name)}"><div class="drawer-head"><span class="eyebrow">AGENT PROFILE · 0${AGENTS.findIndex(item => item.id === agent.id) + 1}</span><button class="icon-btn" data-action="close-agent" aria-label="Đóng hồ sơ">${icon('close', 20)}</button></div><div class="drawer-hero" style="--drawer-accent:${agent.color};--drawer-tint:${agent.tint}"><div class="drawer-avatar">${avatarSvg(agent)}</div><span class="drawer-status"><span></span> Sẵn sàng nhận nhiệm vụ</span></div><div class="drawer-content"><span class="drawer-role">${esc(agent.title)}</span><h2>${esc(agent.name)} <span>✳</span></h2><p>${esc(agent.bio)}</p><h4>PHẠM VI CÔNG VIỆC</h4><ul class="capability-list">${agent.capabilities.map(capability => `<li>${icon('check', 15)} ${esc(capability)}</li>`).join('')}</ul><div class="drawer-task-head"><h4>NHIỆM VỤ ĐANG MỞ (${tasks.length})</h4></div><div class="drawer-tasks">${tasks.length ? tasks.slice(0, 5).map(task => `<button data-action="edit-task" data-id="${esc(task.id)}" class="drawer-task"><span>${esc(task.title)}</span>${statusPill(task.status)}</button>`).join('') : '<p class="empty-inline">Chưa có việc đang mở.</p>'}</div><button class="btn btn-primary drawer-assign" data-action="request-agent-open" data-id="${agent.id}">${icon('messages', 17)} Gửi yêu cầu cho ${esc(agent.name)}</button><button class="btn btn-outline drawer-assign" style="margin-top:9px" data-action="new-task-agent" data-id="${agent.id}">${icon('plus', 17)} Tạo nhiệm vụ</button><p class="drawer-footnote">Xem quy trình, nguyên tắc và phản hồi ở mục Yêu cầu Agent. Chế độ offline không phải AI thật.</p></div></aside>`;
 }
 function taskModal() {
   if (!ui.modalOpen) return '';
@@ -179,8 +182,8 @@ function taskModal() {
 }
 function render() {
   const stats = getStats(workspace.tasks);
-  const views = { office: () => officeView(stats), board: boardView, agents: agentsView, activity: activityView, about: aboutView };
-  app.innerHTML = `<div class="app-shell">${sideBar(stats)}<div class="app-main">${topbar()}<main class="page-content" id="main-content">${(views[ui.view] || views.office)()}</main><footer class="app-footer"><span>© ${new Date().getFullYear()} MinD Agent Office</span><span>V1.0 · Built with curiosity <span class="footer-heart">♥</span></span></footer></div>${mobileNav()}</div>${agentDrawer()}${taskModal()}<div id="global-toast" role="status" aria-live="polite" class="toast ${ui.toast ? 'is-visible' : ''}">${esc(ui.toast)}</div>`;
+  const views = { office: () => officeView(stats), requests: () => requestUI.renderView(workspace), board: boardView, agents: agentsView, activity: activityView, about: aboutView };
+  app.innerHTML = `<div class="app-shell">${sideBar(stats)}<div class="app-main">${topbar()}<main class="page-content" id="main-content">${(views[ui.view] || views.office)()}</main><footer class="app-footer"><span>© ${new Date().getFullYear()} MinD Agent Office</span><span>V1.1 · Built with curiosity <span class="footer-heart">♥</span></span></footer></div>${mobileNav()}</div>${agentDrawer()}${taskModal()}<div id="global-toast" role="status" aria-live="polite" class="toast ${ui.toast ? 'is-visible' : ''}">${esc(ui.toast)}</div>`;
   document.body.classList.toggle('modal-open', ui.modalOpen || Boolean(ui.agentId));
   if (ui.modalOpen) queueMicrotask(() => document.getElementById('task-title')?.focus());
 }
@@ -205,9 +208,12 @@ document.addEventListener('click', event => {
   const target = event.target.closest('[data-action]');
   if (!target) return;
   const { action, id, view, status } = target.dataset;
+  if (requestUI.handleClick(action, target.dataset)) return;
   switch (action) {
     case 'nav': navigate(view); break;
     case 'agent': ui.agentId = id; render(); break;
+    case 'request-agent-open': requestUI.selectAgent(id); ui.agentId = null; navigate('requests'); break;
+    case 'request-from-task': { const task = workspace.tasks.find(item => item.id === id); if (task) { requestUI.fromTask(task); navigate('requests'); } break; }
     case 'close-agent': closeAgent(); break;
     case 'new-task': openModal(); break;
     case 'new-task-agent': ui.agentId = null; openModal(null, id); break;
@@ -220,6 +226,7 @@ document.addEventListener('click', event => {
   }
 });
 document.addEventListener('submit', event => {
+  if (event.target.id === 'request-form') { event.preventDefault(); void requestUI.submit(event.target); return; }
   if (event.target.id !== 'task-form') return;
   event.preventDefault();
   const data = Object.fromEntries(new FormData(event.target).entries());
@@ -231,6 +238,7 @@ document.addEventListener('submit', event => {
   } catch (error) { showToast(error.message || 'Không thể lưu nhiệm vụ.', true); }
 });
 document.addEventListener('change', event => {
+  if (requestUI.handleChange(event)) return;
   if (event.target.matches('[data-status-change]')) {
     const { id } = event.target.dataset;
     persist(moveTask(workspace, id, event.target.value));
@@ -239,6 +247,7 @@ document.addEventListener('change', event => {
   if (event.target.id === 'agent-filter') { ui.filterAgent = event.target.value; render(); }
 });
 document.addEventListener('input', event => {
+  requestUI.rememberDraft(event);
   if (event.target.id !== 'task-search') return;
   ui.search = event.target.value;
   const cursor = event.target.selectionStart;
@@ -268,5 +277,5 @@ document.addEventListener('drop', event => {
   persist(moveTask(workspace, taskId, zone.dataset.dropStatus));
   showToast('Đã cập nhật bảng nhiệm vụ.');
 });
-document.addEventListener('keydown', event => { if (event.key === 'Escape') { if (ui.modalOpen) closeModal(); else if (ui.agentId) closeAgent(); } });
+document.addEventListener('keydown', event => { if (event.key === 'Enter' && (event.ctrlKey || event.metaKey) && event.target.id === 'request-message') { event.preventDefault(); event.target.form?.requestSubmit(); } if (event.key === 'Escape') { if (ui.modalOpen) closeModal(); else if (ui.agentId) closeAgent(); } });
 render();

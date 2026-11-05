@@ -54,6 +54,7 @@ const ago = (minutes) => new Date(Date.now() - minutes * 60000).toISOString();
 export function seedWorkspace() {
   return {
     schema: 1,
+    requests: [],
     tasks: [
       { id: 'sample-1', title: 'Lên kế hoạch Agent Office V1.0', description: 'Xác định phạm vi, luồng giao việc và mốc phát triển MVP.', agentId: 'nova', status: 'done', priority: 'high', createdAt: ago(2600), updatedAt: ago(450) },
       { id: 'sample-2', title: 'Khảo sát 5 mô hình AI Office', description: 'Tổng hợp best practices và trade-off từ các mô hình agent workplace.', agentId: 'ivy', status: 'review', priority: 'high', createdAt: ago(1400), updatedAt: ago(128) },

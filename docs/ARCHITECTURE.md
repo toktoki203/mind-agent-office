@@ -1,68 +1,43 @@
-# Architecture · MinD Agent Office
+# Architecture · MinD Agent Office V1.1
 
-## V1.0 (implemented)
-
-```text
-Browser
-  index.html + src/styles.css
-  src/app.mjs         ← UI, event delegation, drag/drop, prompt copy
-  src/avatars.mjs     ← original chibi SVG character renderer
-  src/domain.mjs      ← validation + task CRUD + audit event functions
-  src/data.mjs        ← 5 agent profiles + demo seed
-  localStorage        ← per-browser persistence (no sync)
-```
-
-### Entities
-
-- `Agent`: id, name, title, group, capabilities, promptRole, avatar style metadata.
-- `Task`: id, title, description, agentId, status (`todo` | `progress` | `review` | `done`), priority, createdAt, updatedAt.
-- `Activity`: id, at, agentId, label, detail, kind; records local UI actions.
-- `Workspace`: schema, tasks[], activities[]; seeded on first load.
-
-**State ownership:** `domain.mjs` owns validation and immutable state updates; the view calls domain actions and persists results. The activity timeline is a local UI action history (not immutable enterprise audit logging).
-
-### Boundaries and limitations
-
-- All 5 Agents are **static professional personas**. They are not models, autonomous workers, or background services.
-- All demo tasks and demo activities are **seed data**.
-- A copied prompt is a **manual handoff** to ChatGPT, not a completed Agent execution.
-- No secret credentials, network mutations, server access, user accounts, multi-device sync, enterprise data isolation, notification delivery, or approval execution exists in V1.0.
-- Avoid storing business-sensitive information in `localStorage`; the MVP has no application-level encryption or role permissions.
-
-## V2.0 (proposed, NOT implemented)
+## Working browser prototype
 
 ```text
-Authenticated Web App (role-based access)
-            │ HTTPS
-       Backend API
-            │
-    ┌───────┼───────────┬──────────────┐
-    │       │           │              │
- Task DB   Agent       Approval      Event / Job
- + Audit   Orchestrator Service      Queue
-            │           │              │
-      OpenAI API      Human review   Schedulers
-            │
-         Tools layer: GitHub / Google Workspace / Search
+index.html + src/styles.css + src/request-ui.css
+                 │
+           src/app.mjs    ← Existing office, Kanban, activity, agent drawer
+                 │
+         src/request-ui.mjs  ← Request inbox, agent conversations, mode selector
+                 │
+         src/requests.mjs    ← Role policies and immutable request functions
+                 │
+         src/domain.mjs      ← Task CRUD, localStorage persistence
+                 │
+         src/data.mjs        ← Chibi character metadata, demo tasks
+
+  Browser localStorage: Workspace { schema:1, tasks[], activities[], requests[] }
 ```
 
-### Execution flow (future)
+### Request entity
 
-1. User submits a task with expected output, model budget, and assigned Agent.
-2. Backend authenticates user and validates tool permissions, scopes, and budgets.
-3. Agent orchestrator generates an execution plan with explicit tool grants.
-4. Read-only research may run; external writes (email, publishing, merging code, destructive actions) require human approval and an idempotent action token.
-5. Server records traces, outputs, status, cost, errors and an immutable approval log.
-6. Only after a successful tool response should task status become `done`.
+`AgentRequest { id, agentId, title, status: pending|answered|error, createdAt, updatedAt, error?, messages: Message[] }`
 
-### Recommended implementation order
+`Message { id, role:user|assistant, content, mode?:offline|ai, at }`
 
-- V1.1: repo-linked CI + visual QA, export/import JSON and test coverage.
-- V2.0: authentication + Postgres backend + audit trail + real-time state updates.
-- V2.1: scoped OpenAI Responses API orchestration for one Agent; prompt-injection safeguards, server-only secrets, usage limits.
-- V2.2: GitHub/Drive tools with per-action approvals and service-account policy.
-- V3.0: cross-agent delegation, queueing, recurring schedules, monitoring and notifications.
+Limits: 80 conversations, 30 messages each, 4,000 characters per user turn; 250 activity entries. V1.0 localStorage remains readable and is upgraded in memory with `requests:[]` to preserve all existing tasks. Data never syncs between browsers.
 
-### Deployment guardrails
+### Offline vs AI response
 
-Keep the GitHub repository private; do not commit API keys. Use a server-side secret manager for any future LLM keys. Review CORS, auth, rate limits, input validation, retention and tenancy before letting the platform access private company data.
+- **Offline:** `src/requests.mjs` generates a deterministic 4-step process outline based on the selected Agent's charter. Explicit UI badge says **not AI**; no tool calls.
+- **AI:** the Vercel `/api/agent.js` Function requires `OPENAI_API_KEY` and `AGENT_OFFICE_ACCESS_CODE` secrets server-side. It validates, rate-limits (best effort), and calls OpenAI's Responses API with `store:false`. No tools are configured. Bad credentials/unconfigured backend result in a visible error, not a fake reply.
+
+### Security
+
+The shared access code is a private-prototype guard, not authentication. The frontend shows no OpenAI API key. Any deployment with real company data needs SSO, per-user authorization, a DB, retention controls, a robust rate-limit service, access auditing and human approvals before allowing external tool actions.
+
+### Production development milestones
+
+- V1.2: Vercel project and secure credentials, smoke test direct API request.
+- V2.0: authentication, database, proper conversation sync and action audit trail.
+- V2.1: tool scopes for read-only research, approval gateway for all external writes.
+- V3.0: reliable cross-agent orchestration, queues, traceability and usage budgets.

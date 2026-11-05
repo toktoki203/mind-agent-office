@@ -1,12 +1,10 @@
-# MinD Agent Office V1.0 ✳
+# MinD Agent Office V1.1 ✳
 
-A lightweight, responsive **chibi-style virtual AI office** for organizing work across five agent roles. Vietnamese UI, zero runtime dependencies, and no API key needed to try the MVP.
+An interactive **chibi-style AI Office** with five specialist roles, task board, request inbox, role policies, message histories, and an **optional** secure-side OpenAI Responses API endpoint.
 
-> **Important:** The V1.0 Agents are **role profiles and task coordinators**, not autonomous AI workers. New tasks, board changes, history, and locally saved data work. The **Copy prompt** action creates an agent-specific brief for manually using ChatGPT. No AI provider, GitHub writes, email sends, background jobs, or shared database are configured in this version.
+**Read the mode labels carefully:** the default **Offline** responses are deterministic checklists derived from agent rules. They are **not AI analysis** and do not research the web or execute tasks. Genuine model replies require a configured Vercel backend, OpenAI API key and an access code. The API offers **text answers only**; Agents cannot send mail, edit GitHub or take other external actions.
 
-## Quick start
-
-You need [Node.js 20+](https://nodejs.org/).
+## Start the MVP locally
 
 ```bash
 git clone https://github.com/toktoki203/mind-agent-office.git
@@ -14,50 +12,66 @@ cd mind-agent-office
 npm start
 ```
 
-Open **http://localhost:4173**. No `npm install`, environment variables, or external services required. If port 4173 is occupied, `PORT=4180 npm start` (Windows PowerShell: `$env:PORT=4180; npm start`).
+Open **http://localhost:4173**. You need Node.js 20+; there are no runtime dependencies and no `npm install` step. The built-in server serves only the UI assets; it does **not** run the `/api/agent` Vercel Function locally.
 
-You can also run `python -m http.server 4173` from the project folder, though the Node server is recommended.
+## Try the request workflow
 
-### Quick 5-minute walkthrough
+1. Click a **chibi Agent** in the office and choose **Gửi yêu cầu**; alternatively use **Yêu cầu Agent** in the left menu.
+2. Choose Nova, Ivy, Momo, Byte or Kai. The right column displays the **mission, four-step process, expected output, limits and common policies**.
+3. Enter a specific request and select **Gửi yêu cầu** (or Ctrl+Enter). You'll see your message and the **Offline checklist** reply.
+4. Follow up in the same conversation; choose another Agent or click a recent conversation to see its history.
+5. From a Kanban card click **Yêu cầu** to prefill the request with the task. **Tạo nhiệm vụ** remains separate from actual Agent execution.
+6. **Sao chép brief** copies agent rules and request context for manual use in ChatGPT.
 
-1. **Văn phòng:** Click any of the five chibi avatars to open agent profile and scope.
-2. **Giao việc:** Choose **Tạo nhiệm vụ**, assign an Agent and set a priority.
-3. **Bảng nhiệm vụ:** Drag a task to another column or change its status in the selector. Search and filter by agent.
-4. **Prompt:** Click **Prompt** on a task to copy an Agent-specific instruction to paste into ChatGPT.
-5. **Nhật ký hoạt động:** Verify create/edit/move/delete events. Refresh the page: data persists in this browser via `localStorage`.
-6. **Khôi phục dữ liệu mẫu:** Use the activity page reset action; it replaces your local tasks, so back up anything important first.
+### Agent roster
 
-## Features
+| Agent | Responsibility | Output |
+|---|---|---|
+| Nova — CEO | Coordination and prioritization | Delegated action plan and approval points |
+| Ivy — Research | Research methodology and evidence | Evidence register and research report outline |
+| Momo — Creative | Campaign ideas and brand story | Concepts and creative brief |
+| Byte — Developer | Architecture and tests | Technical plan and QA checklist |
+| Kai — Operations | SOP and execution control | SOP, tracking and handoff checklist |
 
-- Chibi office scene: **Nova (CEO)**, **Ivy (Research)**, **Momo (Creative)**, **Byte (Developer)**, **Kai (Operations)**.
-- Create/edit/delete tasks; assign/transfer across agents; set priority and 4 Kanban statuses.
-- Drag & drop on desktop; status dropdown works on touch devices.
-- Task search, agent filter, mini dashboard, activity timeline, prompt-copy workflow.
-- Responsive mobile navigation and keyboard-accessible controls.
-- HTML/CSS/ES modules; original SVG avatars; no assets from external AI services.
-- Sample tasks are **illustrative**, not evidence that the Agents have performed the work.
+See [Agent rules](docs/AGENT_RULES.md) for detailed boundaries.
 
-## Architecture & safety
+## Deploy to Vercel + enable real AI replies
 
-Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). The MVP is static, with `src/data.mjs` defining roles and demo data, `src/domain.mjs` containing pure task/state actions, `src/avatars.mjs` defining editable SVG character art, and `src/app.mjs` handling UI/events and local persistence.
+1. Open [Vercel New Project](https://vercel.com/new), import `toktoki203/mind-agent-office` (private repo must be granted access), select **Framework: Other**, **Root: `./`**; use the checked-in `vercel.json` settings.
+2. Deploy to get a preview or production URL. Without any secrets, this deploy is still fully usable in **Offline** mode.
+3. To enable AI replies, add **server-side Vercel environment variables** under Project → Settings → Environment Variables:
+   - `OPENAI_API_KEY`: your separate OpenAI API key, **never pasted into the web UI** or committed to Git.
+   - `AGENT_OFFICE_ACCESS_CODE`: a long, unique secret you choose to restrict MVP access.
+   - `OPENAI_MODEL`: optional; default is `gpt-5-mini`.
+4. Redeploy. On the web app, go to **Yêu cầu Agent → Chế độ phản hồi → AI thật**, then enter only the `AGENT_OFFICE_ACCESS_CODE` in the request panel. It stays in the browser session; your API key remains server-only.
+5. Send a request and confirm it is labeled **Phản hồi AI qua API**. If credentials are missing or incorrect, the app displays an explicit error and retains the unsatisfied request. No reply is fabricated.
 
-- No user authentication or multi-user collaboration.
-- Local browser storage is **not** a secure database; **do not store confidential work data** in this demo.
-- No OpenAI API calls, no Google Workspace integrations, no automatic execution.
-- Do not commit credentials. The future AI service must run on a secure server with permissions and approval gates.
+**Important:** ChatGPT Business subscription and OpenAI API billing are separate. This access code is merely an MVP guard—not user authentication, enterprise-grade privacy, or a comprehensive rate limiter. Never enter confidential company information here before implementing user accounts, proper authentication, DB isolation, monitoring, consent and audit logs. The serverless function has an in-memory best-effort request cap (8/min per IP per instance) and no external tool permissions. <https://developers.openai.com/api/docs/guides/text>
 
-## Quality checks
+## ChatGPT sandbox preview
+
+A single HTML file can be generated for embedding on a ChatGPT Page or running offline. The sandbox includes the **Offline** request workflow but **cannot call** Vercel's private API unless hosted on the configured website.
+
+```bash
+python scripts/build-standalone.py
+```
+
+The standalone artifact is generated for the preview renderer, with no CDN assets, imports or API keys.
+
+## Verification
 
 ```bash
 npm run check
 npm test
 ```
 
-A GitHub Actions workflow runs these checks on push/PR.
+12 automated Node tests cover task CRUD, role policies, request histories, offline responses, migration from V1.0 storage, and the API's validation/access controls. A browser smoke test also verified the UI on 1365px and 390px layouts.
 
-## Deployment
+## Storage and permissions
 
-To share a preview, deploy this repository as a **static website** on a hosting provider that can serve ES modules with correct MIME types. For example, in Vercel choose framework **Other**, leave build command unset, and publish the repository root as the static output. Do not claim there is a live URL until the provider confirms deployment.
+- All task and conversation content resides in **your browser's localStorage**; if sandbox storage is blocked, it persists only for the current page session. There is no shared database or cross-device sync.
+- `AGENT_OFFICE_ACCESS_CODE` is held in `sessionStorage` in the Vercel browser and sent only to `/api/agent`; do not reuse a company password.
+- The demo contains illustrative starter tasks, not evidence of real Agent work.
+- Do not allow autonomous external actions without explicit human approval, scoped permissions and independent event logging.
 
----
-Built for MinD Agent Office. V1.0 — task management foundation, not an autonomous agent platform yet.
+[Architecture](docs/ARCHITECTURE.md) · [Agent charter](docs/AGENT_RULES.md)

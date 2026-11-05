@@ -14,7 +14,7 @@ export function readWorkspace(storage) {
     const raw = storage?.getItem(STORAGE_KEY);
     if (!raw) return seedWorkspace();
     const parsed = JSON.parse(raw);
-    if (parsed?.schema === 1 && Array.isArray(parsed.tasks) && Array.isArray(parsed.activities)) return parsed;
+    if (parsed?.schema === 1 && Array.isArray(parsed.tasks) && Array.isArray(parsed.activities)) return { ...parsed, requests: Array.isArray(parsed.requests) ? parsed.requests : [] };
   } catch { /* Private mode, corrupt JSON or blocked storage: use a fresh workspace. */ }
   return seedWorkspace();
 }
