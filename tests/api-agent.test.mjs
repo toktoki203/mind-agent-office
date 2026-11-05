@@ -1,53 +1,36 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import agentHandler from '../api/agent.js';
+import handler from '../api/agent.js';
 
-const makeRequest = (body, code = 'office-demo-code') => new Request('https://example.com/api/agent', { method:'POST', headers:{ 'content-type':'application/json','x-office-access-code':code,'x-forwarded-for':'192.0.2.3' },body: JSON.stringify(body) });
-
-test('API refuses unsupported methods and unconfigured AI', async () => {
-  const get = await agentHandler.fetch(new Request('https://example.com/api/agent'));
-  assert.equal(get.status, 405);
-  const previousKey = process.env.OPENAI_API_KEY;
-  const previousCode = process.env.AGENT_OFFICE_ACCESS_CODE;
-  delete process.env.OPENAI_API_KEY;
-  delete process.env.AGENT_OFFICE_ACCESS_CODE;
-  const r = await agentHandler.fetch(makeRequest({agentId:'nova', messages:[{role:'user',content:'Hello'}]}));
-  assert.equal(r.status, 503);
-  if(previousKey!==undefined) process.env.OPENAI_API_KEY=previousKey;
-  if(previousCode!==undefined) process.env.AGENT_OFFICE_ACCESS_CODE=previousCode;
+async function call(method='GET',body=null,token='test-code'){
+ const headers={authorization:'Bearer '+token};
+ const req={method,headers,body};
+ const res={statusCode:200,headers:{},setHeader(k,v){this.headers[k]=v;return this;},status(v){this.statusCode=v;return this;},json(v){this.body=v;return this;}};
+ await handler(req,res);
+ return res;
+}
+test('GET readiness and unsupported method',async()=>{
+ const a=await call('GET');assert.equal(a.statusCode,200);assert.equal(typeof a.body.ready,'boolean');
+ const b=await call('DELETE');assert.equal(b.statusCode,405);
 });
-
-test('API protects the model with access code and validates input', async () => {
-  const priorKey=process.env.OPENAI_API_KEY,priorCode=process.env.AGENT_OFFICE_ACCESS_CODE;
-  process.env.OPENAI_API_KEY='test-only';
-  process.env.AGENT_OFFICE_ACCESS_CODE='office-demo-code';
-  try {
-    assert.equal((await agentHandler.fetch(makeRequest({agentId:'nova',messages:[{role:'user',content:'Hi'}]},'invalid'))).status, 403);
-    assert.equal((await agentHandler.fetch(makeRequest({agentId:'invalid',messages:[{role:'user',content:'Hi'}]}))).status, 400);
-    assert.equal((await agentHandler.fetch(makeRequest({agentId:'nova',messages:[{role:'assistant',content:'Hi'}]}))).status, 400);
-  } finally {
-    if(priorKey===undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY=priorKey;
-    if(priorCode===undefined) delete process.env.AGENT_OFFICE_ACCESS_CODE; else process.env.AGENT_OFFICE_ACCESS_CODE=priorCode;
-  }
+test('POST requires configured credentials',async()=>{
+ const key=process.env.OPENAI_API_KEY,code=process.env.AGENT_OFFICE_ACCESS_KEY;
+ delete process.env.OPENAI_API_KEY;delete process.env.AGENT_OFFICE_ACCESS_KEY;
+ try{const r=await call('POST',{step:'intake',agentId:'nova',mission:'test'});assert.equal(r.statusCode,503);}
+ finally{if(key!==undefined)process.env.OPENAI_API_KEY=key; if(code!==undefined)process.env.AGENT_OFFICE_ACCESS_KEY=code;}
 });
-
-test('API consumes Responses output and returns an explicit AI mode', async () => {
-  const key=process.env.OPENAI_API_KEY,code=process.env.AGENT_OFFICE_ACCESS_CODE;
-  const originalFetch=globalThis.fetch;
-  process.env.OPENAI_API_KEY='test-only'; process.env.AGENT_OFFICE_ACCESS_CODE='office-demo-code';
-  globalThis.fetch=async (_url,options) => {
-    const req=JSON.parse(options.body);
-    assert.match(req.instructions, /không có web, email, GitHub/i);
-    assert.equal(req.store,false);
-    return Response.json({model:'gpt-5-mini',output:[{type:'message',role:'assistant',content:[{type:'output_text',text:'Đề xuất hai bước có kiểm tra.'}]}]});
-  };
-  try {
-    const r=await agentHandler.fetch(makeRequest({agentId:'nova',messages:[{role:'user',content:'Tạo đề xuất dự án'}]}));
-    assert.equal(r.status,200);
-    assert.deepEqual((await r.json()).mode,'ai');
-  } finally {
-    globalThis.fetch=originalFetch;
-    if(key===undefined) delete process.env.OPENAI_API_KEY; else process.env.OPENAI_API_KEY=key;
-    if(code===undefined) delete process.env.AGENT_OFFICE_ACCESS_CODE; else process.env.AGENT_OFFICE_ACCESS_CODE=code;
-  }
+test('auth and agent validation enforced',async()=>{
+ const key=process.env.OPENAI_API_KEY,code=process.env.AGENT_OFFICE_ACCESS_KEY;
+ process.env.OPENAI_API_KEY='test-api-key';process.env.AGENT_OFFICE_ACCESS_KEY='test-code';
+ try{
+  assert.equal((await call('POST',{step:'intake',agentId:'nova',mission:'test'},'wrong')).statusCode,401);
+  assert.equal((await call('POST',{step:'research',agentId:'nova',mission:'test'})).statusCode,400);
+ }finally{if(key===undefined)delete process.env.OPENAI_API_KEY;else process.env.OPENAI_API_KEY=key;if(code===undefined)delete process.env.AGENT_OFFICE_ACCESS_KEY;else process.env.AGENT_OFFICE_ACCESS_KEY=code;}
+});
+test('Responses output is returned and no external writes',async()=>{
+ const key=process.env.OPENAI_API_KEY,code=process.env.AGENT_OFFICE_ACCESS_KEY,fetchOld=globalThis.fetch;
+ process.env.OPENAI_API_KEY='test-api-key';process.env.AGENT_OFFICE_ACCESS_KEY='test-code';
+ globalThis.fetch=async(_,opts)=>{const req=JSON.parse(opts.body);assert.equal(req.store,false);assert.equal(req.tools,undefined);return Response.json({output:[{type:'message',content:[{type:'output_text',text:'Mission ready'}]}]});};
+ try{const r=await call('POST',{step:'intake',agentId:'nova',mission:'Help define this mission'});assert.equal(r.statusCode,200);assert.equal(r.body.output,'Mission ready');}
+ finally{globalThis.fetch=fetchOld;if(key===undefined)delete process.env.OPENAI_API_KEY;else process.env.OPENAI_API_KEY=key;if(code===undefined)delete process.env.AGENT_OFFICE_ACCESS_KEY;else process.env.AGENT_OFFICE_ACCESS_KEY=code;}
 });
