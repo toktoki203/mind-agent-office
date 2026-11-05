@@ -24,7 +24,7 @@ createServer(async(req,res)=>{
   }
   const path=resolve(root,`.${decoded==='/'?'/index.html':decoded}`);
   if(path!==root&&!path.startsWith(root+sep)){res.writeHead(403).end('Forbidden');return;}
-  if(!['/','/index.html','/favicon.svg'].includes(decoded)&&!/^\\/src\\/[a-zA-Z0-9_.-]+\\.(mjs|css)$/.test(decoded)){res.writeHead(404).end('Not found');return;}
+  if(!['/','/index.html','/favicon.svg'].includes(decoded)&&!/^\/src\/[a-zA-Z0-9_.-]+\.(mjs|css)$/.test(decoded)){res.writeHead(404).end('Not found');return;}
   const info=await stat(path);if(!info.isFile()){res.writeHead(404).end('Not found');return;}
   res.writeHead(200,{'content-type':(type[extname(path)]||'application/octet-stream')+'; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});
   res.end(await readFile(path));
