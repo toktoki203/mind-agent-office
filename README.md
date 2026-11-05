@@ -1,3 +1,29 @@
+# MinD Agent Office V2.0 ✳
+
+Mission-driven chibi AI Office with **six specialized roles** (Nova CEO, Ivy Research, Ada BA, Momo Creative, Byte Developer, Kai Operations).
+
+**Input a natural-language mission** → Nova intake → Ivy web research → Ada pain points & requirements → Nova plans and delegates → specialist agents produce deliverables → Nova QA and final report.
+
+### Try it immediately
+
+Open `index.html` directly in your browser and choose **Demo mô phỏng**. The demo displays six animated chibi agents, each skillset, real-time workflow statuses, handoff logs, Task Board, stage outputs and Markdown/JSON export. **Demo responses are scripted examples, not AI research.**
+
+### Enable live AI
+
+Set these **server-only environment variables** in Vercel: `OPENAI_API_KEY` and `AGENT_OFFICE_ACCESS_KEY`. Redeploy and choose **AI thật (API)** in the UI, then enter your access code. You can optionally set `OPENAI_MODEL` and `OPENAI_RESEARCH_MODEL` (default `gpt-5-mini`). This mode uses the OpenAI Responses API, with hosted web search for Research and separate API charges.
+
+Local preview: Node.js 20+ → `npm start` → `http://localhost:4173`. Run `npm run check` and `npm test`.
+
+### Current scope
+
+This is an **interactive browser-driven orchestration MVP**, not an always-on autonomous workforce. Your browser must stay open during execution. Agent outputs are saved in your browser only, not an enterprise DB. Agents can research and create deliverables as text, but **cannot commit to GitHub, publish, email, or edit external tools**. Do not put confidential work data in this MVP. The shared access code is not a replacement for authentication. Add secure identity, task queue, database, role/tool permissions, quotas and approval before production use.
+
+See [V2 deployment and workflow documentation](docs/AGENT_OFFICE_V2.md).
+
+---
+
+## Previous V1.1 reference
+
 # MinD Agent Office V1.1 ✳
 
 An interactive **chibi-style AI Office** with five specialist roles, task board, request inbox, role policies, message histories, and an **optional** secure-side OpenAI Responses API endpoint.
