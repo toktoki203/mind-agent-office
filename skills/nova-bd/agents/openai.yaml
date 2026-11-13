@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nova · BD Director"
+  short_description: "Intake and orchestrate MinD Agent Office briefs. Trigger for user missions, business analysis, JTBD, team"
+  brand_color: "#9C83DE"
