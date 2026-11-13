@@ -1,97 +1,258 @@
 <!doctype html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#15172d" />
-<title>MinD Agent Office V2.0 — Mission Control</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1b2337">
+<title>MinD Agent Office V3 — Pixel RPG</title>
 <style>
-:root{--ink:#21243b;--muted:#788096;--stroke:#e8e8f0;--blue:#6865e9;--purple:#8885ed;--paper:#f8f8fc;--green:#26a97c;--shadow:0 14px 45px rgba(35,37,68,.055)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:14px}button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:#5f5bd8;text-decoration:none}.shell{display:grid;grid-template-columns:234px minmax(0,1fr);min-height:100vh}.sidebar{background:#17182f;color:#ebeaff;padding:26px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:25px}.brand{display:flex;gap:11px;align-items:center;padding:6px 9px}.brand-logo{width:41px;height:41px;border-radius:14px;background:linear-gradient(135deg,#817cf7,#ecacd4);display:grid;place-items:center;color:white;font-size:25px;font-weight:900;box-shadow:0 8px 25px #706de85c}.brand strong{display:block;font-size:17px;letter-spacing:-.5px}.brand small{display:block;font-size:10px;color:#aaa9ca;letter-spacing:.11em;margin-top:3px}.nav-label{font-size:10px;letter-spacing:.16em;color:#8e90ad;margin:0 12px 10px;font-weight:800}.nav{display:grid;gap:5px}.nav a{color:#b3b4cf;padding:12px 13px;border-radius:12px;display:flex;gap:12px;align-items:center;font-weight:650;font-size:12px;transition:.2s}.nav a:hover,.nav a.active{background:#292a4e;color:#fff}.nav .ico{font-size:17px;width:21px;text-align:center}.side-bottom{margin-top:auto;padding:15px;border-radius:16px;background:#262741;border:1px solid #333557}.side-bottom .tiny{color:#b6b5d5;font-size:11px;line-height:1.7}.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#48dca8;box-shadow:0 0 0 4px #48dca81a;margin-right:6px}.page{min-width:0;padding:0 34px 64px}.topbar{height:77px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--stroke);gap:14px}.eyebrow{color:#8589a1;font-size:10px;font-weight:850;letter-spacing:.15em;text-transform:uppercase}.topbar h3{margin:5px 0 0;font-size:15px}.top-actions{display:flex;align-items:center;gap:10px}.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid #e5e4f0;background:white;border-radius:25px;padding:8px 11px;color:#5d647a;font-size:11px;font-weight:750}.tag.purple{color:#6a61cb;background:#f0eeff;border-color:#e9e7ff}.btn{border:none;border-radius:12px;padding:12px 18px;font-weight:800;transition:.18s;font-size:12px;white-space:nowrap}.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.42;cursor:not-allowed;transform:none}.btn-primary{background:#6b67e9;color:white;box-shadow:0 7px 19px #7b6eef2b}.btn-light{background:#f1f0ff;color:#615bd3}.btn-ghost{background:white;border:1px solid var(--stroke);color:#646982}.btn-danger{background:#fff0f0;color:#be5263}.hero{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(240px,.7fr);gap:17px;margin-top:26px}.hero-main{padding:25px 27px;border-radius:23px;background:radial-gradient(circle at 91% 4%,#a9a0f6 0,#8881ec 18%,transparent 46%),linear-gradient(120deg,#4546a8,#6963d6 75%);color:white;position:relative;overflow:hidden;min-height:170px}.hero-main:after{content:'✳';position:absolute;right:30px;bottom:-49px;font-size:175px;line-height:1;color:#ffffff0e;pointer-events:none}.hero-main .eyebrow{color:#d8d5ff}.hero h1{font-size:clamp(24px,3vw,35px);margin:9px 0;letter-spacing:-1.1px}.hero p{max-width:620px;font-size:13px;line-height:1.7;color:#eeecff;margin:0}.hero-summary{border-radius:23px;background:white;border:1px solid var(--stroke);padding:21px;box-shadow:var(--shadow)}.hero-summary h3{font-size:12px;margin:0 0 18px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:16px}.metric strong{display:block;font-size:25px;letter-spacing:-1px}.metric span{color:var(--muted);font-size:11px}.section-head{display:flex;align-items:flex-end;justify-content:space-between;margin:29px 0 13px;gap:10px}.section-head h2{font-size:19px;letter-spacing:-.5px;margin:5px 0 0}.section-head p{font-size:12px;color:var(--muted);margin:5px 0 0}.composer-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(250px,.75fr);gap:17px}.card{background:white;border:1px solid var(--stroke);border-radius:19px;box-shadow:var(--shadow)}.composer{padding:22px}.composer label{font-size:12px;font-weight:850;display:block;margin-bottom:11px}.textarea{display:block;width:100%;min-height:125px;resize:vertical;border:1px solid #e6e7f0;background:#fcfcff;color:#2d3044;border-radius:13px;padding:15px;outline:none;line-height:1.65;font-size:13px}.textarea:focus{border-color:#a29ef6;box-shadow:0 0 0 3px #8885f119}.chips{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0 18px}.chip{border:1px solid #e9e9f4;background:#fafaff;border-radius:18px;padding:7px 10px;color:#676d84;font-size:10px;font-weight:650}.chip:hover{background:#f0eeff;color:#605bd0}.composer-footer{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;justify-content:space-between}.mode-control{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.mode-control select,.mode-control input{border:1px solid #e6e7f1;border-radius:10px;padding:11px;background:white;color:#525972;max-width:190px;outline:none;font-size:11px}.input-info{font-size:10px;color:#989bad;display:block;margin-top:7px}.run-actions{display:flex;gap:8px}.tip-card{padding:19px 21px;background:#fff}.tip-head{display:flex;gap:9px;align-items:center;font-weight:850;font-size:13px;margin-bottom:10px}.tip-head span{background:#f0efff;border-radius:10px;padding:8px;font-size:19px}.tip-card p{font-size:12px;line-height:1.85;color:#777c91;margin:0}.tip-card ul{padding-left:17px;line-height:1.85;font-size:11px;color:#666d83;margin:11px 0 0}.notice{padding:10px 12px;border-radius:10px;background:#f6f5ff;color:#67639c;font-size:11px;line-height:1.6;margin-top:13px}.notice.warn{color:#a17144;background:#fff8eb}.progress-wrap{padding:19px 23px}.progress-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}.progress-row strong{font-size:12px}.progress-row span{color:#848ba0;font-size:11px}.progress-track{height:8px;background:#efeff7;border-radius:20px;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(90deg,#6c66e5,#65c5c0);border-radius:20px;transition:width .35s}.workflow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.step{min-width:0;background:white;border:1px solid var(--stroke);border-radius:16px;padding:14px 10px;position:relative;text-align:center}.step:after{content:'→';position:absolute;right:-10px;top:33%;color:#bdc0d3;font-size:14px;z-index:1}.step:last-child:after{display:none}.step .bubble{width:36px;height:36px;border-radius:14px;background:#f2f3f8;display:grid;place-items:center;font-size:18px;margin:0 auto 10px}.step strong{font-size:11px;display:block}.step small{display:block;font-size:10px;margin-top:5px;color:#969aae}.step.done{border-color:#bee7db;background:#f9fffc}.step.done .bubble{background:#e2f7ef}.step.working{border-color:#aca6fa;background:#faf9ff;box-shadow:0 0 0 3px #857df110}.step.working .bubble{background:#ebeaff;animation:pulse 1.4s infinite}.step.error{border-color:#f2b4c2}.step.error .bubble{background:#fff0f2}@keyframes pulse{50%{box-shadow:0 0 0 8px #8883ee12}}.office-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.agent-card{position:relative;border:1px solid var(--stroke);border-radius:18px;background:#fff;display:flex;align-items:center;text-align:left;gap:13px;padding:15px;min-width:0;box-shadow:var(--shadow)}.agent-card:hover{border-color:#b7b4ff;transform:translateY(-2px)}.agent-avatar{width:67px;height:72px;flex-shrink:0;border-radius:16px;display:grid;place-items:center;overflow:hidden;background:var(--tint)}.agent-avatar svg{width:66px;height:70px}.agent-meta{min-width:0}.agent-name{font-weight:850;font-size:13px;display:block}.agent-title{font-size:10px;color:#81859b;display:block;margin:4px 0 7px}.agent-state{font-size:10px;color:#82879a;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.agent-state.working{color:#7168d8;font-weight:850}.agent-state.done{color:#249972}.agent-badge{position:absolute;right:10px;top:10px;font-size:9px;color:#8c8fb0;background:#f5f5fc;padding:5px 7px;border-radius:10px;font-weight:750}.agent-badge.working{background:#eeecff;color:#6c63db}.agent-badge.done{background:#e3f7ed;color:#229c70}.detail-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(275px,.75fr);gap:17px}.handoff-feed{padding:20px;min-height:240px}.feed-item{display:grid;grid-template-columns:35px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid #f1f1f6}.feed-item:last-child{border:0}.feed-icon{width:32px;height:32px;border-radius:10px;background:#f2f1ff;color:#6e66cb;display:grid;place-items:center;font-size:16px}.feed-item strong{font-size:11px}.feed-item p{font-size:11px;color:#71778d;line-height:1.65;margin:4px 0 0}.feed-item time{display:block;color:#a9acb9;font-size:10px;margin-top:5px}.empty{padding:28px 15px;color:#9a9eb2;font-size:12px;text-align:center;line-height:1.8}.output-card{padding:18px 21px;min-height:240px}.output-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.output-card h3{font-size:13px;margin:0}.output-card small{color:#a0a3b6}.output{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.75 Inter,"Segoe UI",Arial,sans-serif;color:#4e536b;margin:0;max-height:355px;overflow:auto}.source-list{display:grid;gap:7px;border-top:1px solid var(--stroke);padding-top:11px;margin-top:11px}.source-list a{font-size:11px;overflow-wrap:anywhere}.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.board-col{background:#f1f1f8;border:1px solid #e8e8f1;border-radius:17px;padding:12px;min-height:140px}.board-col h3{font-size:12px;margin:5px 4px 12px;display:flex;justify-content:space-between}.board-col h3 span{background:white;border-radius:10px;padding:2px 7px;color:#8b8ea0}.task{border:1px solid #ececf5;border-radius:13px;background:white;padding:13px;margin-bottom:8px;box-shadow:0 3px 13px #53557408}.task b{font-size:11px;line-height:1.5;display:block}.task p{margin:7px 0;font-size:10px;color:#81859a;line-height:1.55}.task footer{color:#716ae0;font-size:10px;font-weight:800}.report-actions{display:flex;gap:7px;flex-wrap:wrap}.report-card{padding:19px 21px}.report-note{font-size:11px;color:#878c9e;margin:9px 0 0}.modal-back{position:fixed;inset:0;background:#17172b85;z-index:20;display:flex;justify-content:flex-end}.drawer{width:min(420px,100%);background:#fff;height:100%;overflow:auto;padding:24px;box-shadow:-15px 0 55px #15152b22}.drawer-close{float:right;border:1px solid #e6e6f2;background:white;border-radius:10px;padding:8px 12px}.drawer-hero{display:flex;align-items:center;gap:15px;padding:22px;border-radius:18px;background:#f6f5ff;margin:15px 0}.drawer-hero .agent-avatar{width:92px;height:98px}.drawer-hero .agent-avatar svg{width:90px;height:98px}.drawer h2{font-size:23px;margin:0}.drawer p{font-size:12px;color:#73788c;line-height:1.8}.skills{display:flex;flex-wrap:wrap;gap:8px}.skill{font-size:10px;padding:8px 10px;background:#f3f3ff;color:#6964a8;border-radius:10px;font-weight:700}.drawer h4{margin:23px 0 12px}.drawer .assignment{background:#fbfbff;border:1px solid #e8e7f6;border-radius:12px;padding:13px;font-size:12px;line-height:1.65}.toast{position:fixed;bottom:22px;right:22px;z-index:50;background:#272948;color:white;border-radius:12px;padding:13px 17px;box-shadow:0 12px 35px #15152b33;font-size:12px;max-width:350px}.hidden{display:none!important}footer.footnote{font-size:11px;color:#9ca0b2;margin-top:28px;line-height:1.8}.live-mark{display:inline-flex;align-items:center;gap:7px}.stage-list{display:grid;gap:9px}.stage-entry{border:1px solid #eaeaf3;padding:11px;border-radius:12px;background:#fff;display:flex;align-items:center;gap:10px}.stage-entry b{font-size:11px;min-width:0;flex:1}.stage-entry span{font-size:10px;color:#8d90a5}.stage-entry button{font-size:10px;background:#f3f2ff;color:#625cd2;padding:7px 9px;border:0;border-radius:8px}.spinner{display:inline-block;width:12px;height:12px;border:2px solid #c4c0fe;border-top-color:#615fe4;border-radius:50%;animation:spin .85s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:1140px){.shell{grid-template-columns:75px minmax(0,1fr)}.sidebar{padding:20px 9px}.brand{padding:7px}.brand>div:last-child,.nav-label,.nav .txt,.side-bottom{display:none}.nav a{justify-content:center}.nav .ico{font-size:19px}.office-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.page{padding:0 24px 50px}}@media(max-width:760px){.shell{display:block}.sidebar{height:auto;position:sticky;z-index:10;padding:8px 10px;flex-direction:row;justify-content:space-between;align-items:center;gap:2px}.brand-logo{width:34px;height:34px;font-size:20px}.nav{display:flex;gap:0}.nav a{padding:8px}.nav .ico{font-size:17px}.page{padding:0 13px 40px}.topbar{height:64px}.topbar .eyebrow,.top-actions .tag:first-child{display:none}.topbar h3{font-size:13px}.hero,.composer-grid,.detail-layout{grid-template-columns:1fr}.hero-main{min-height:145px;padding:22px}.hero-summary{padding:18px}.metrics{grid-template-columns:repeat(4,1fr)}.metric strong{font-size:20px}.metric span{font-size:9px}.workflow{grid-template-columns:repeat(3,minmax(0,1fr))}.step:nth-child(3):after{display:none}.office-grid,.board{grid-template-columns:1fr}.composer{padding:16px}.mode-control{flex:1}.composer-footer{align-items:stretch}.run-actions{width:100%}.run-actions button{flex:1}.section-head{margin-top:23px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+:root{color-scheme:dark;--ink:#f8e9cf;--muted:#b9afad;--edge:#332a45;--accent:#e6bc78}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#151a2c;color:var(--ink);font-family:ui-monospace,Consolas,"Courier New",monospace}
+button,textarea{font:inherit}button{cursor:pointer}
+#world{display:block;width:100vw;height:100dvh;image-rendering:pixelated;touch-action:none;outline:none}
+#hud{position:fixed;top:max(15px,env(safe-area-inset-top));left:18px;pointer-events:none;display:flex;align-items:center;gap:12px;text-shadow:2px 2px #292234}
+.logo{font-size:clamp(13px,1.7vw,21px);font-weight:900;letter-spacing:.1em;color:#fff5dd}.logo span{color:#f2ce83}
+#hud small{font-size:10px;color:#e5d5ba;background:#2f2d48b3;padding:6px 9px;border:2px solid #675877}
+#hint{position:fixed;bottom:max(15px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);max-width:calc(100vw - 20px);color:#fff1ce;background:#25243ddb;border:2px solid #645373;box-shadow:0 5px 0 #141527;padding:8px 13px;font-size:11px;pointer-events:none;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#notice{position:fixed;top:66px;left:50%;transform:translateX(-50%);background:#35344e;border:2px solid #c9a26b;box-shadow:0 5px 0 #141627;padding:11px 15px;font-size:12px;max-width:92vw;display:none;z-index:7}
+#notice.show{display:block}
+#shade{position:fixed;inset:0;background:#0e1025a8;display:none;z-index:10;align-items:flex-end;justify-content:center;padding:20px}
+#shade.open{display:flex}
+.dialog{width:min(640px,100%);max-height:min(83dvh,800px);overflow-y:auto;background:#2d2942;border:4px solid #806985;outline:4px solid #17182a;box-shadow:0 14px 0 #0b0f1b;padding:23px;position:relative}
+.dialog h2{font-size:19px;margin:0 40px 6px 0;color:#fff3cf}.dialog h3{font-size:13px;margin:20px 0 8px;color:#ffd48b}.dialog p,.dialog li{font-size:12px;line-height:1.75;color:#dbd0ce}.dialog .sub{font-size:11px;color:#adcccd;margin-bottom:18px}
+.close{position:absolute;right:14px;top:12px;width:32px;height:32px;background:#563a57;border:2px solid #ac8290;color:white}
+.skill-list{display:flex;flex-wrap:wrap;gap:7px}.chip{background:#3f405f;border:1px solid #6d6e8e;padding:7px 9px;font-size:11px;color:#e9e2fc}
+button.action{background:#7b6ea5;border:2px solid #c7b4d2;color:#fff8e5;padding:10px 12px;margin:6px 6px 6px 0;box-shadow:0 3px 0 #171728;font-size:12px}
+button.action.primary{background:#638d87;border-color:#aed4bb}button.action:hover{filter:brightness(1.15)}
+textarea{width:100%;min-height:122px;resize:vertical;color:#fff4d9;background:#1c2036;border:2px solid #6b6487;padding:12px;line-height:1.5;font-size:12px}
+.mission{border:2px solid #595273;background:#22263b;padding:12px;margin:11px 0}.mission strong{font-size:12px}.mission small{color:#c0bbce;font-size:10px}.mission p{margin:7px 0}
+.step{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px dashed #67607b}.step .meta{font-size:10px;color:#abb5ce;margin-top:4px}.step button{white-space:nowrap}
+.note{background:#3d3449;padding:11px;border-left:3px solid #e7bc77;font-size:11px;line-height:1.7;color:#e9dbc8}
+label{font-size:12px}
+@media(max-width:650px){#hud{left:10px;top:10px;display:block}.logo{font-size:13px}#hud small{display:block;margin-top:6px;font-size:9px}#hint{font-size:9px}.dialog{padding:14px;max-height:88dvh}.dialog h2{font-size:15px}#shade{padding:10px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<div class="shell">
-  <aside class="sidebar">
-    <div class="brand"><div class="brand-logo">✳</div><div><strong>MinD Office</strong><small>AGENT OS · V2.0</small></div></div>
-    <div><p class="nav-label">WORKSPACE</p><nav class="nav" id="nav">
-      <a href="#console" class="active" aria-label="Mission Control"><span class="ico">✦</span><span class="txt">Mission Control</span></a>
-      <a href="#workflow" aria-label="Workflow"><span class="ico">↗</span><span class="txt">Workflow</span></a>
-      <a href="#team" aria-label="Đội ngũ"><span class="ico">◉</span><span class="txt">Đội ngũ Agent</span></a>
-      <a href="#board-section" aria-label="Bảng nhiệm vụ"><span class="ico">▦</span><span class="txt">Bảng nhiệm vụ</span></a>
-      <a href="#report" aria-label="Báo cáo"><span class="ico">▤</span><span class="txt">Báo cáo</span></a>
-    </nav></div>
-    <div class="side-bottom"><div style="font-size:12px;font-weight:850;margin-bottom:8px"><span class="status-dot"></span> Mission engine</div><div class="tiny">Research → BA → Planning → Execution → QA<br />Dữ liệu được lưu trong trình duyệt.</div></div>
-  </aside>
-  <main class="page">
-    <header class="topbar"><div><span class="eyebrow">YOUR LITTLE AI HEADQUARTERS</span><h3>Văn phòng Agent <span style="color:#817be9">✳</span></h3></div><div class="top-actions"><span class="tag" id="apiState">◌ Đang kiểm tra AI</span><span class="tag purple" id="modeBadge">DEMO MODE</span></div></header>
-    <section class="hero" id="console"><div class="hero-main"><span class="eyebrow">MIN D · AUTONOMOUS MISSION WORKSPACE</span><h1>Ý tưởng của bạn.<br />Cả văn phòng cùng làm.</h1><p>Chỉ cần đưa ra một nhận định. Nova điều phối, Ivy research, Ada phân tích business, rồi các Agent chuyên môn thực thi và bàn giao kết quả.</p></div><div class="hero-summary"><h3>✧ Office overview</h3><div class="metrics"><div class="metric"><strong>06</strong><span>AI roles</span></div><div class="metric"><strong id="metricTasks">00</strong><span>Tasks</span></div><div class="metric"><strong id="metricDone">00</strong><span>Hoàn thành</span></div><div class="metric"><strong id="metricSteps">00</strong><span>Agent runs</span></div></div></div></section>
-    <div class="section-head"><div><span class="eyebrow">01 / INBOX</span><h2>Giao một Mission</h2><p>Nhập tự nhiên, Nova sẽ tổ chức cả quy trình cho bạn.</p></div></div>
-    <section class="composer-grid"><div class="card composer"><label for="missionInput">Nhận định, ý tưởng hoặc mục tiêu của bạn</label><textarea class="textarea" id="missionInput" maxlength="3000" placeholder="Ví dụ: Tôi muốn xây dựng một công cụ AI giúp đội ngũ Sales tiết kiệm thời gian tổng hợp báo cáo mỗi ngày. Hãy nghiên cứu, xác định pain points rồi đề xuất MVP..." spellcheck="false"></textarea><div class="chips"><button class="chip" data-sample="sales">✦ Tăng hiệu suất Sales</button><button class="chip" data-sample="music">♫ Phát triển 3 kênh nhạc AI</button><button class="chip" data-sample="app">⌘ Xây AI product mới</button></div><div class="composer-footer"><div><div class="mode-control"><select id="runMode" aria-label="Chế độ xử lý"><option value="demo">Demo mô phỏng</option><option value="live">AI thật (API)</option></select><input type="password" id="accessCode" class="hidden" placeholder="Access code của Office" autocomplete="off" aria-label="Access code" /></div><span class="input-info" id="modeHint">Chạy thử luồng mô phỏng, không gọi AI hay Internet.</span></div><div class="run-actions"><button id="stopBtn" class="btn btn-danger hidden">■ Dừng</button><button id="runBtn" class="btn btn-primary">✦ Khởi chạy Mission</button></div></div></div><aside class="card tip-card"><div class="tip-head"><span>🧠</span> Cách văn phòng xử lý</div><p>Không cần tự phân công từng nhân vật. Nova sẽ điều phối workflow theo năng lực thực tế của từng Agent.</p><ul><li>Research tìm bằng chứng, không bịa nguồn</li><li>BA xác định pain points, yêu cầu & KPI</li><li>Nova chọn Agent thực thi phù hợp</li><li>Kết quả, bàn giao và lỗi đều có nhật ký</li></ul><div class="notice" id="privacyNotice">Demo chỉ minh hoạ cách phối hợp, không phải báo cáo nghiên cứu thật.</div></aside></section>
-    <div class="section-head" id="workflow"><div><span class="eyebrow">02 / ORCHESTRATION</span><h2>Mission Workflow <span id="missionStatus" class="tag" style="vertical-align:middle">Chưa bắt đầu</span></h2><p>Theo dõi từng điểm bàn giao theo thời gian thực.</p></div></div>
-    <div class="card progress-wrap"><div class="progress-row"><strong id="progressName">Nova đang chờ Mission đầu tiên</strong><span id="progressText">0 / 0 bước</span></div><div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div></div>
-    <div class="workflow" id="flowSteps" style="margin-top:12px"></div>
-    <div class="section-head" id="team"><div><span class="eyebrow">03 / PEOPLE & SKILLSETS</span><h2>Đội ngũ chibi Agents</h2><p>Bấm vào từng Agent để xem skillset, phạm vi và nhiệm vụ hiện tại.</p></div><span class="tag">06 chuyên môn</span></div>
-    <section class="office-grid" id="agentGrid"></section>
-    <div class="section-head"><div><span class="eyebrow">04 / LIVE ACTIVITY</span><h2>Agent handoff & kết quả</h2><p>Nhật ký công việc, phản hồi và bằng chứng đầu ra.</p></div></div>
-    <section class="detail-layout"><div class="card handoff-feed"><div class="output-toolbar"><h3>↗ Nhật ký bàn giao</h3><small id="eventCount">0 sự kiện</small></div><div id="activityFeed" class="empty">Chưa có Mission. Hãy giao việc để thấy Agent phối hợp.</div></div><div class="card output-card"><div class="output-toolbar"><h3 id="outputHeading">▤ Agent output</h3><small id="outputMeta">Chưa có kết quả</small></div><pre class="output" id="outputText">Khi Agent hoàn tất một bước, nội dung thực tế sẽ được hiển thị tại đây.</pre><div id="outputSources"></div><div id="stageDetail" class="stage-list" style="margin-top:12px"></div></div></section>
-    <div class="section-head" id="board-section"><div><span class="eyebrow">05 / TASK DELIVERY</span><h2>Task Board</h2><p>Việc Nova giao cho các Agent chuyên môn, tự chuyển trạng thái theo kết quả.</p></div></div>
-    <section class="board" id="taskBoard"></section>
-    <div class="section-head" id="report"><div><span class="eyebrow">06 / DELIVERY</span><h2>Mission report</h2><p>Kết quả và dấu vết thực thi có thể xuất ra để xem lại.</p></div></div>
-    <div class="card report-card"><div class="report-actions"><button class="btn btn-light" id="copyReport">⎘ Sao chép báo cáo</button><button class="btn btn-ghost" id="downloadReport">↓ Tải .md</button><button class="btn btn-ghost" id="downloadJson">↓ Tải .json</button><button class="btn btn-ghost" id="clearMission">↺ Tạo Mission mới</button></div><div class="report-note" id="reportSummary">Báo cáo sẽ được tạo từ kết quả Agent, không đánh dấu hoàn thành khi có lỗi.</div></div>
-    <footer class="footnote">MinD Agent Office V2.0 · Mô phỏng vận hành ở chế độ Demo. AI thật yêu cầu backend + OpenAI API + Access Code. Chưa hỗ trợ job nền khi đóng tab, ghi dữ liệu GitHub/Drive hay tự publish. Không đưa dữ liệu bảo mật vào Demo / localStorage.</footer>
-  </main>
-</div>
-<div id="drawerMount"></div><div id="toast" class="toast hidden" role="status"></div>
+<canvas id="world" tabindex="0" aria-label="Bản đồ văn phòng pixel tương tác; chạm hoặc click một nhân vật để xem nhiệm vụ"></canvas>
+<div id="hud"><div class="logo">MinD<span>✦</span> AGENT OFFICE <span>V3</span></div><small>PIXEL RPG · 7 AGENTS · NO API</small></div>
+<div id="hint">Click nhân vật để xem skills · Click bảng MISSION để giao việc · Kéo để quan sát văn phòng</div>
+<div id="notice" role="status" aria-live="polite"></div>
+<div id="shade" aria-hidden="true"><section class="dialog" role="dialog" aria-modal="true" aria-label="Agent Office" id="dialog"><button class="close" id="close" aria-label="Đóng">×</button><div id="dialog-body"></div></section></div>
 <script type="module">
-const AGENTS=[
-{id:'nova',name:'Nova',title:'CEO & Orchestrator',tag:'Điều phối',color:'#746dde',tint:'#e9e7ff',hair:'#40365e',shirt:'#6661c3',bio:'Chief of Staff: tiếp nhận ý tưởng, xác định mission, thiết kế workflow, lựa chọn nhân sự và phê duyệt chất lượng.',skills:['Mission framing','Strategic planning','Task routing','Dependency mapping','Quality review']},
-{id:'ivy',name:'Ivy',title:'Research Analyst',tag:'Research',color:'#4cb69c',tint:'#e0f8f0',hair:'#54413d',shirt:'#319e8e',bio:'Nghiên cứu web và tài liệu công khai, tách dữ kiện khỏi giả định, tổng hợp insight có dẫn chứng.',skills:['Market research','Web search','Source verification','Competitive analysis','Evidence mapping']},
-{id:'ada',name:'Ada',title:'Business Analyst',tag:'BA',color:'#6a9ae6',tint:'#e8f1ff',hair:'#3f4c65',shirt:'#5c91d2',bio:'Biến insight thành problem statement, pain points, yêu cầu, KPI và tiêu chí nghiệm thu.',skills:['Problem definition','Root cause analysis','Pain-point mapping','PRD & user stories','Acceptance criteria','KPI design']},
-{id:'momo',name:'Momo',title:'Creative Strategist',tag:'Creative',color:'#e58caf',tint:'#ffedf4',hair:'#72425b',shirt:'#db7eae',bio:'Thiết kế concept sản phẩm, trải nghiệm và cách truyền thông theo insight khách hàng.',skills:['Concept development','UX storytelling','Content & copy','Brand direction','Creative brief']},
-{id:'byte',name:'Byte',title:'Product Engineer',tag:'Builder',color:'#e9a864',tint:'#fff2e3',hair:'#4c495d',shirt:'#e4a05d',bio:'Đề xuất kiến trúc, viết bản thảo triển khai và test plan. Không tự ghi repo khi chưa có công cụ và quyền.',skills:['Technical architecture','Frontend & backend','Code drafts','Testing','Security review']},
-{id:'kai',name:'Kai',title:'Operations Manager',tag:'Operations',color:'#7b9fe4',tint:'#edf3ff',hair:'#3d455c',shirt:'#7493cd',bio:'Tổ chức checklist, quy trình bàn giao, vận hành, kiểm soát tiến độ và rủi ro.',skills:['SOP design','Rollout planning','Handoff & QA','Risk register','Operational KPIs']}
-];
-const SAMPLES={sales:'Tôi muốn xây dựng AI tool giúp đội ngũ Sales giảm thời gian nhập liệu, tổng hợp báo cáo và ưu tiên khách hàng. Hãy nghiên cứu vấn đề, xác định pain points và đề xuất MVP khả thi.',music:'Tôi muốn phát triển 3 kênh nhạc AI cho thị trường Việt Nam, Hàn Quốc và Mỹ. Hãy phân tích thị trường, nhu cầu người nghe, khác biệt thương hiệu và kế hoạch vận hành.',app:'Tôi muốn xây một ứng dụng AI Agent Office có khả năng nhận nhận định, research, BA phân tích pain point, tự lập kế hoạch rồi giao việc cho developer, creative và operations.'};
-const STAGES=[['intake','Nova · Intake','🧭'],['research','Ivy · Research','🔎'],['analysis','Ada · BA','📊'],['plan','Nova · Plan','🧩'],['execute','Team · Execute','⚡'],['review','Nova · Review','✅']];
-const STORE='mind-agent-office:v2';let state={mission:null,events:[],selected:null};let activeRun=null;let apiReady=false;const $=id=>document.getElementById(id);
-function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function stamp(){return new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}function id(){return globalThis.crypto?.randomUUID?.() || String(Date.now());}
-function agent(id){return AGENTS.find(a=>a.id===id)||AGENTS[0];}
-function avatar(a){const glasses=['ivy','ada'].includes(a.id);const bangs=a.id==='momo'?'M22 40 Q15 13 44 17 Q66 12 72 43 Q58 33 52 23 Q48 38 36 32 Q32 40 22 40':'M22 39 Q16 15 41 17 Q68 12 70 40 Q62 31 60 25 Q48 34 38 27 Q31 38 22 39';return `<svg viewBox="0 0 92 96" aria-hidden="true"><circle cx="46" cy="48" r="43" fill="${a.tint}"/><path d="M12 96 Q12 69 30 65 L62 65 Q80 69 80 96" fill="${a.shirt}"/><path d="M37 62 L37 78 Q46 86 55 78 L55 62" fill="#f2b698"/><ellipse cx="20" cy="46" rx="6" ry="10" fill="#efb99b"/><ellipse cx="72" cy="46" rx="6" ry="10" fill="#efb99b"/><ellipse cx="46" cy="46" rx="25" ry="29" fill="#ffd7b7"/><path d="${bangs}" fill="${a.hair}"/><path d="M20 39 Q17 16 43 15 Q69 12 72 41 L67 49 Q67 28 59 24 Q45 31 36 27 Q26 41 25 47 Z" fill="${a.hair}"/><circle cx="37" cy="48" r="2.2" fill="#51444a"/><circle cx="55" cy="48" r="2.2" fill="#51444a"/><path d="M42 59 Q46 62 50 59" fill="none" stroke="#b67677" stroke-width="1.7" stroke-linecap="round"/><ellipse cx="30" cy="55" rx="5" ry="2.4" fill="#f2a7a4" opacity=".45"/><ellipse cx="62" cy="55" rx="5" ry="2.4" fill="#f2a7a4" opacity=".45"/>${glasses?'<g stroke="#5a526e" stroke-width="2" fill="none"><circle cx="37" cy="48" r="8"/><circle cx="55" cy="48" r="8"/><path d="M45 47 H47"/></g>':''}${a.id==='momo'?'<path d="M60 28 l6 -6 4 6 -4 4z" fill="#f6bad3"/>':''}${a.id==='byte'?'<path d="M20 44 Q14 23 27 21 M70 44 Q76 23 65 21" stroke="#4a435d" stroke-width="4" fill="none"/>':''}</svg>`;}
-function persist(){try{localStorage.setItem(STORE,JSON.stringify(state));}catch{}}function toast(message){$('toast').textContent=message;$('toast').classList.remove('hidden');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.add('hidden'),3500);}
-function log(agentId,message){state.events.unshift({id:id(),agentId,message,at:stamp()});state.events=state.events.slice(0,65);persist();render();}
-function newMission(input,mode){return {id:id(),input,title:input.slice(0,85),mode,createdAt:new Date().toISOString(),status:'running',steps:[],tasks:[],report:'',selected:null};}
-function getStep(key){return [...(state.mission?.steps||[])].reverse().find(s=>s.step===key);}
-function getStageStatus(stage){const m=state.mission;if(!m)return'pending';const group=m.steps.filter(s=>s.step===stage);if(!group.length)return'pending';if(group.some(s=>s.status==='error'))return'error';if(group.some(s=>s.status==='working'))return'working';return group.every(s=>s.status==='done')?'done':'pending';}
-function renderFlow(){const m=state.mission;$('flowSteps').innerHTML=STAGES.map(([key,name,emoji])=>{const status=getStageStatus(key);return `<div class="step ${status}"><div class="bubble">${status==='working'?'<span class="spinner"></span>':status==='done'?'✓':status==='error'?'!':emoji}</div><strong>${esc(name)}</strong><small>${{pending:'Chờ xử lý',working:'Đang làm',done:'Hoàn tất',error:'Có lỗi'}[status]}</small></div>`;}).join('');const total=m?.steps?.length||0,completed=m?.steps.filter(s=>s.status==='done').length||0;let p=total?Math.round(completed/Math.max(total,6)*100):0;if(m?.status==='done')p=100;$('progressFill').style.width=p+'%';$('progressText').textContent=`${completed} / ${Math.max(6,total)} lượt xử lý`;$('progressName').textContent=m?m.status==='running'?'Các Agent đang phối hợp theo mission':m.status==='done'?'Mission đã tổng hợp xong':m.status==='error'?'Mission tạm dừng do lỗi':m.status==='stopped'?'Mission đã dừng': 'Mission đang chờ tiếp tục':'Nova đang chờ Mission đầu tiên';$('missionStatus').textContent= m?{running:'Đang xử lý',done:'Hoàn thành',error:'Có lỗi',stopped:'Đã dừng',interrupted:'Bị gián đoạn'}[m.status]||m.status:'Chưa bắt đầu';}
-function renderAgents(){const m=state.mission;$('agentGrid').innerHTML=AGENTS.map(a=>{const own=m?.steps.filter(s=>s.agentId===a.id)||[];const status=own.some(s=>s.status==='working')?'working':own.some(s=>s.status==='done')?'done':'ready';const last=own.slice(-1)[0];const assignment=m?.tasks.find(t=>t.agentId===a.id);return `<button class="agent-card" data-agent="${a.id}" style="--tint:${a.tint}"><span class="agent-avatar">${avatar(a)}</span><span class="agent-meta"><strong class="agent-name">${a.name}</strong><span class="agent-title">${a.title}</span><span class="agent-state ${status}">${status==='working'?'✳ Đang thực thi':assignment?assignment.title:(last?.status==='done'?'✓ Đã bàn giao':'Sẵn sàng nhận việc')}</span></span><span class="agent-badge ${status}">${status==='working'?'LIVE':status==='done'?'DONE':a.tag}</span></button>`;}).join('');}
-function renderActivity(){$('eventCount').textContent=state.events.length+' sự kiện';$('activityFeed').className=state.events.length?'':'empty';$('activityFeed').innerHTML=state.events.length?state.events.slice(0,12).map(e=>`<div class="feed-item"><div class="feed-icon">${{nova:'🧭',ivy:'🔎',ada:'📊',momo:'🎨',byte:'⌘',kai:'☷'}[e.agentId]||'✳'}</div><div><strong>${esc(agent(e.agentId).name)}</strong><p>${esc(e.message)}</p><time>${esc(e.at)}</time></div></div>`).join(''):'Chưa có sự kiện nào.';}
-function renderBoard(){const tasks=state.mission?.tasks||[];$('taskBoard').innerHTML=[['todo','Chờ thực thi'],['working','Đang thực hiện'],['done','Đã bàn giao']].map(([status,label])=>{const arr=tasks.filter(t=>status==='todo'?['todo','error'].includes(t.status):t.status===status);return `<div class="board-col"><h3>${label}<span>${arr.length}</span></h3>${arr.length?arr.map(t=>`<div class="task"><b>${esc(t.title)}</b><p>${esc(t.deliverable||'Đầu ra cụ thể theo mission')}</p><footer>${esc(agent(t.agentId).name)} · ${esc(t.status==='error'?'Cần xử lý lỗi':t.priority)}</footer></div>`).join(''):'<div class="empty" style="padding:19px 0">Chưa có nhiệm vụ</div>'}</div>`;}).join('');$('metricTasks').textContent=String(tasks.length).padStart(2,'0');$('metricDone').textContent=String(tasks.filter(t=>t.status==='done').length).padStart(2,'0');$('metricSteps').textContent=String(state.mission?.steps.filter(s=>s.status==='done').length||0).padStart(2,'0');}
-function renderOutput(){const steps=state.mission?.steps||[];let current=steps.find(s=>s.id===state.selected)||steps[steps.length-1];$('outputHeading').textContent=current?`▤ ${agent(current.agentId).name} · ${current.label}`:'▤ Agent output';$('outputMeta').textContent=current?{done:'Đã trả kết quả',working:'Đang chờ phản hồi',error:'Lỗi thực thi'}[current.status]||'Chưa xử lý':'Chưa có kết quả';$('outputText').textContent=current?.output|| (current?.status==='working'?'Agent đang xử lý yêu cầu, đợi kết quả từ server...':'Khi Agent hoàn tất một bước, nội dung sẽ được hiển thị tại đây.');$('outputSources').innerHTML=current?.sources?.length?`<div class="source-list"><strong style="font-size:11px">Nguồn được công cụ tìm kiếm cung cấp</strong>${current.sources.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">↗ ${esc(s.title||s.url)}</a>`).join('')}</div>`:'';$('stageDetail').innerHTML=steps.length?steps.map((s,i)=>`<div class="stage-entry"><b>${i+1}. ${esc(agent(s.agentId).name)} · ${esc(s.label)}</b><span>${s.status==='done'?'✓':s.status==='working'?'●':s.status==='error'?'!':'○'}</span><button data-step="${esc(s.id)}">Xem</button></div>`).join(''):'';}
-function render(){renderFlow();renderAgents();renderActivity();renderBoard();renderOutput();const m=state.mission;$('reportSummary').textContent=!m?'Báo cáo được tạo sau khi Nova review.':m.status==='done'?'Đã có báo cáo cuối cùng. Bạn có thể tải Markdown hoặc JSON.':`Mission ${m.status}. Có thể xuất nhật ký hiện có, kết quả chưa được nghiệm thu.`;const working=Boolean(activeRun);$('runBtn').disabled=working;$('stopBtn').classList.toggle('hidden',!working);}
-function contextFor(){return (state.mission?.steps||[]).filter(s=>s.status==='done').map(s=>`[${agent(s.agentId).name} / ${s.label}]\n${s.output}`).join('\n\n').slice(-17500);}
-function demoResult(step,agentId,task){const subject=state.mission?.input.slice(0,160)||'Mission';const title=`Mission: ${subject}`;const prefix='[MÔ PHỎNG — nội dung minh hoạ, không phải nghiên cứu/triển khai thật]\n\n';const examples={intake:`MISSION BRIEF\n• Nhận định: ${subject}\n• Mục tiêu: chuyển ý tưởng thành một hướng triển khai kiểm chứng được.\n• Phạm vi: khảo sát, phân tích nhu cầu, đề xuất công việc và bàn giao.\n• Success criteria: pain points rõ ràng, KPI đo được, kế hoạch thực hiện có chủ sở hữu.\n• Giả định: chưa có dữ liệu nội bộ hoặc phỏng vấn người dùng.`,research:`RESEARCH HANDOFF\n• Cần khảo sát vấn đề người dùng đang gặp phải và công cụ hiện có.\n• Nhóm nguồn cần tìm: báo cáo ngành, phản hồi thực tế, case study và benchmark.\n• Khung so sánh: chi phí, thời gian xử lý, hiệu quả và rào cản áp dụng.\n• Evidence gap: chưa truy cập nguồn online, chưa có số liệu được kiểm chứng.\n• Handoff → Ada: kiểm định các giả thuyết pain point, không coi chúng là sự thật.`,analysis:`BA / PROBLEM DEFINITION\n• Problem statement (giả thuyết): quy trình hiện tại có ma sát, thiếu tự động hoá hoặc thiếu kết quả đo lường.\n• Pain points cần xác minh: tốn thời gian; khó theo dõi; bàn giao không nhất quán.\n• Yêu cầu ưu tiên: nhập Mission tự nhiên, phân tích insight, tự phân công, nhận output, audit history.\n• KPI gợi ý: thời gian hoàn tất một mission, tỷ lệ task thành công, thời gian chờ duyệt.\n• Acceptance criteria: từng Agent tạo kết quả cụ thể, có log nguồn/giả định, không tự nhận đã làm khi chưa làm.`,plan:`Nova đề xuất giao Byte xây hướng kỹ thuật, Momo dựng concept giao diện/nội dung và Kai xây checklist triển khai. Thứ tự: làm song song sau BA; Nova review khi đủ đầu ra.`,momo:`CREATIVE DELIVERABLE — BẢN THẢO\n• Concept: “Từ một ý tưởng thành một tổ đội AI phối hợp.”\n• Trải nghiệm chính: Mission Inbox → Live Workflow → Task Board → Result.\n• Microcopy: “Nova đang điều phối”, “Ivy đang kiểm chứng”, “Ada đang phân tích pain point”.\n• Tiêu chí: hiểu được Agent nào làm gì, giao việc cho ai, kết quả ở đâu.`,byte:`ENGINEERING DELIVERABLE — BẢN THẢO\n• Kiến trúc: Web UI → API proxy bảo vệ key → OpenAI Responses API.\n• Luồng: Nova intake → Ivy web research → Ada BA → Nova JSON planning → worker calls → Nova review.\n• Dữ liệu Mission / Task / Step có trạng thái và timestamp.\n• Kiểm thử: validation, phân công đúng vai trò, lỗi API không được đánh dấu done.\n• Giới hạn: chưa có hệ thống queue/background hoặc tự ghi vào GitHub.`,kai:`OPERATIONS DELIVERABLE — BẢN THẢO\n• SOP: tiếp nhận → nghiên cứu → phân tích → giao việc → nghiệm thu.\n• Checklist: mỗi task có owner, deliverable, acceptance criteria và nhật ký.\n• Risk: sai nguồn, vòng lặp quá lâu, API cost, lộ access code, lỗi handoff.\n• Cần phê duyệt trước khi gửi email, ghi code, publish hoặc xoá tài liệu.`,review:`MISSION REVIEW — KẾT QUẢ MÔ PHỎNG\n• ${title}\n• Workflow đã chạy qua các vai trò và tạo các output minh hoạ.\n• Đầu ra: Mission brief, Research framework, BA problem framing, phân công, bản thảo từ Agent chuyên môn.\n• Chưa thực hiện: web research thật, kiểm chứng số liệu, viết code vào repository, chạy test hoặc publish.\n• Bước tiếp theo: bật chế độ AI thật bằng OpenAI API + Access Code; bổ sung quyền công cụ nếu cần hành động ngoài hệ thống.`};return prefix+(examples[step==='execute'?agentId:step]||'Không có mẫu demo.');}
-function demoPlan(){return {output:demoResult('plan','nova'),assignments:[{agentId:'byte',task:'Đề xuất giải pháp kỹ thuật và cách triển khai MVP',deliverable:'Architecture + implementation approach + test plan',priority:'high'},{agentId:'momo',task:'Thiết kế concept trải nghiệm và nội dung',deliverable:'Creative concept + UX flow + copy',priority:'medium'},{agentId:'kai',task:'Xây checklist nghiệm thu và vận hành',deliverable:'SOP + risk checklist + KPIs',priority:'medium'}]};}
-async function callAgent(step,agentId,task){if(activeRun?.controller.signal.aborted)throw new DOMException('Canceled','AbortError');if(state.mission.mode==='demo'){await new Promise(r=>setTimeout(r,650));if(activeRun?.controller.signal.aborted)throw new DOMException('Canceled','AbortError');return step==='plan'?demoPlan():{output:demoResult(step,agentId,task),sources:[]};}const res=await fetch('/api/agent',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${$('accessCode').value.trim()}`},body:JSON.stringify({step,agentId,mission:state.mission.input,context:contextFor(),task:task||''}),signal:activeRun.controller.signal});const data=await res.json().catch(()=>({error:'Server không trả về JSON hợp lệ.'}));if(!res.ok)throw new Error(data.error||`API ${res.status}`);return data;}
-async function runStep(step,agentId,label,task='',taskRef=null){const entry={id:id(),step,agentId,label,status:'working',output:'',sources:[],startedAt:Date.now()};state.mission.steps.push(entry);state.selected=entry.id;if(taskRef)taskRef.status='working';persist();log(agentId,`Bắt đầu: ${label}${task?` — ${task}`:''}`);try{const result=await callAgent(step,agentId,task);if(activeRun?.controller.signal.aborted)throw new DOMException('Canceled','AbortError');entry.status='done';entry.output=result.output;entry.sources=result.sources||[];entry.durationMs=Date.now()-entry.startedAt;if(taskRef)taskRef.status='done';persist();log(agentId,`Hoàn tất và bàn giao: ${label} (${Math.round(entry.durationMs/1000)}s)`);return result;}catch(err){entry.status='error';entry.output=err.name==='AbortError'?'Đã dừng theo yêu cầu.':`Lỗi: ${err.message}`;if(taskRef)taskRef.status='error';persist();log(agentId,`Không thể hoàn tất ${label}: ${entry.output}`);throw err;}}
-async function runMission(){if(activeRun)return;const input=$('missionInput').value.trim();if(!input){toast('Hãy nhập nhận định hoặc mục tiêu trước khi chạy.');return;}const mode=$('runMode').value;if(mode==='live'&&!apiReady){toast('Server chưa cấu hình AI API và access code.');return;}if(mode==='live'&&!$('accessCode').value.trim()){toast('Cần Access Code để chạy AI thật.');return;}state={mission:newMission(input,mode),events:[],selected:null};activeRun={controller:new AbortController()};$('modeBadge').textContent=mode==='demo'?'DEMO MODE':'LIVE AI';persist();render();try{
-await runStep('intake','nova','Mission intake');log('nova','Đã chuyển Mission Brief cho Ivy Research.');
-await runStep('research','ivy','Evidence research');log('ivy','Đã bàn giao evidence và research gaps cho Ada BA.');
-await runStep('analysis','ada','Pain points & requirements');log('ada','Đã bàn giao problem statement, KPI và acceptance criteria cho Nova.');
-const plan=await runStep('plan','nova','Mission planning');const assignments=plan.assignments||[];if(!assignments.length)throw new Error('Không có phân công hợp lệ.');state.mission.tasks=assignments.map(a=>({id:id(),agentId:a.agentId,title:a.task,deliverable:a.deliverable,status:'todo',priority:a.priority||'medium'}));persist();log('nova',`Đã phân công ${assignments.length} nhiệm vụ cho ${assignments.map(a=>agent(a.agentId).name).join(', ')}.`);
-const workerResults=await Promise.allSettled(state.mission.tasks.map(t=>runStep('execute',t.agentId,`${agent(t.agentId).name} · Execution`,t.title,t)));
-const failed=workerResults.filter(r=>r.status==='rejected');if(failed.length)throw new Error(`${failed.length} Agent thực thi chưa hoàn tất. Xem nhật ký lỗi trước khi chạy lại.`);
-log('nova','Đã nhận đủ bản bàn giao. Bắt đầu tổng hợp và QA.');const review=await runStep('review','nova','Final QA & report');state.mission.report=review.output;state.mission.status='done';persist();log('nova','Đã tổng hợp Mission Report. Chưa thực hiện hành động ghi bên ngoài hệ thống.');toast('Mission hoàn tất, đã có báo cáo.');
-}catch(err){state.mission.status=err.name==='AbortError'?'stopped':'error';if(err.name!=='AbortError')toast('Mission gặp lỗi: '+err.message);persist();}finally{activeRun=null;render();}}
-function exportMarkdown(){const m=state.mission;if(!m)return '';return [`# MinD Agent Office — ${m.mode==='demo'?'DEMO':'LIVE AI'} Mission`,`**Input:** ${m.input}`,`**Trạng thái:** ${m.status}`,`**Ngày tạo:** ${m.createdAt}`,...m.steps.map(s=>`## ${agent(s.agentId).name} — ${s.label}\nTrạng thái: ${s.status}\n\n${s.output}${s.sources?.length?'\nNguồn: '+s.sources.map(x=>x.url).join(', '):''}`),`## Tasks\n${m.tasks.map(t=>`- [${t.status==='done'?'x':' '}] ${agent(t.agentId).name}: ${t.title} (${t.status})`).join('\n')}`,`## Kết luận\n${m.report||'Chưa có báo cáo cuối.'}`].join('\n\n');}
-function download(name,text,type){const blob=new Blob([text],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);}
-function showAgent(agentId){const a=agent(agentId),m=state.mission;const tasks=m?.tasks.filter(t=>t.agentId===agentId)||[];const steps=m?.steps.filter(s=>s.agentId===agentId)||[];$('drawerMount').innerHTML=`<div class="modal-back" id="drawerBack"><aside class="drawer" role="dialog" aria-modal="true" aria-label="Hồ sơ Agent ${esc(a.name)}"><button class="drawer-close" id="drawerClose">✕ Đóng</button><div style="clear:both"></div><div class="drawer-hero"><span class="agent-avatar" style="background:${a.tint}">${avatar(a)}</span><div><span class="eyebrow">${esc(a.tag)}</span><h2>${esc(a.name)}</h2><p style="margin:4px 0 0">${esc(a.title)}</p></div></div><p>${esc(a.bio)}</p><h4>✳ SKILLSET</h4><div class="skills">${a.skills.map(s=>`<span class="skill">${esc(s)}</span>`).join('')}</div><h4>▦ NHIỆM VỤ ĐƯỢC PHÂN CÔNG</h4><div class="assignment">${tasks.length?tasks.map(t=>`<div><b>${esc(t.title)}</b><br />${esc(t.deliverable)} · ${esc(t.status)}</div>`).join('<hr style="border:0;border-top:1px solid #ececf5">'):steps.length?`Đã tham gia ${steps.length} bước: ${steps.map(s=>esc(s.label)).join(', ')}`:'Đang chờ Nova giao việc.'}</div><h4>↗ LẦN THỰC THI GẦN NHẤT</h4><div class="assignment">${steps.length?`<b>${esc(steps[steps.length-1].label)}</b><br>${esc(steps[steps.length-1].status)} — ${esc((steps[steps.length-1].output||'Đang chờ').slice(0,500))}`:'Chưa thực thi trong Mission này.'}</div></aside></div>`;$('drawerClose').onclick=()=> $('drawerMount').innerHTML='';$('drawerBack').onclick=e=>{if(e.target.id==='drawerBack')$('drawerMount').innerHTML='';};}
-function init(){try{const saved=JSON.parse(localStorage.getItem(STORE));if(saved?.mission||saved?.events)state=saved;}catch{}if(state.mission?.status==='running'){state.mission.status='interrupted';for(const s of state.mission.steps)if(s.status==='working'){s.status='error';s.output='Phiên chạy bị gián đoạn do tải lại hoặc đóng tab.';}for(const t of state.mission.tasks)if(t.status==='working')t.status='error';persist();}if(state.mission){$('missionInput').value=state.mission.input;$('runMode').value=state.mission.mode||'demo';}render();fetch('/api/agent',{method:'GET',signal:AbortSignal.timeout(6000)}).then(r=>r.json()).then(data=>{apiReady=!!data.ready;$('apiState').textContent=apiReady?'● AI backend sẵn sàng':'◌ Chưa cấu hình AI';if(!apiReady&&$('runMode').value==='live')$('modeHint').textContent='Cần OPENAI_API_KEY và AGENT_OFFICE_ACCESS_KEY trên server.';}).catch(()=>{$('apiState').textContent='◌ Offline demo';});$('runMode').dispatchEvent(new Event('change'));}
-document.addEventListener('click',async e=>{const b=e.target.closest('button');if(b?.dataset.sample){$('missionInput').value=SAMPLES[b.dataset.sample];$('missionInput').focus();}if(b?.dataset.agent)showAgent(b.dataset.agent);if(b?.dataset.step){state.selected=b.dataset.step;renderOutput();}if(e.target.id==='runBtn')runMission();if(e.target.id==='stopBtn'&&activeRun){activeRun.controller.abort();toast('Đã yêu cầu dừng Mission.');}if(e.target.id==='copyReport'){if(!state.mission)return toast('Chưa có Mission.');try{await navigator.clipboard.writeText(exportMarkdown());toast('Đã sao chép báo cáo.');}catch{toast('Trình duyệt không cho phép sao chép. Hãy tải .md.');}}if(e.target.id==='downloadReport'){if(!state.mission)return toast('Chưa có Mission.');download('mind-agent-mission.md',exportMarkdown(),'text/markdown;charset=utf-8');}if(e.target.id==='downloadJson'){if(!state.mission)return toast('Chưa có Mission.');download('mind-agent-mission.json',JSON.stringify({mission:state.mission,events:state.events},null,2),'application/json');}if(e.target.id==='clearMission'){if(activeRun)return toast('Dừng Mission trước khi tạo mới.');state={mission:null,events:[],selected:null};persist();$('missionInput').value='';render();toast('Đã tạo workspace trống.');}});
-$('runMode').addEventListener('change',e=>{const live=e.target.value==='live';$('accessCode').classList.toggle('hidden',!live);$('modeHint').textContent=live?'Chỉ gửi Mission qua backend riêng. Access Code không lưu trong localStorage.':'Chạy thử luồng mô phỏng, không gọi AI hay Internet.';$('privacyNotice').textContent=live?'AI thật sẽ gửi nội dung Mission tới OpenAI API qua server. Không nhập dữ liệu mật khi chưa có chính sách bảo mật phù hợp.':'Demo chỉ minh hoạ cách phối hợp, không phải báo cáo nghiên cứu thật.';$('privacyNotice').classList.toggle('warn',live);$('modeBadge').textContent=live?'LIVE AI SELECTED':'DEMO MODE';});
-document.querySelectorAll('#nav a').forEach(link=>link.addEventListener('click',()=>{document.querySelectorAll('#nav a').forEach(x=>x.classList.remove('active'));link.classList.add('active');}));
-init();
+import {CREW,getCrew} from './src/crew-v3.mjs';
+import {createMission,readyStages,completeStage,buildWorkPrompt,loadState,saveState,getMissionStats} from './src/mission-v3.mjs';
+
+const canvas=document.querySelector('#world'),ctx=canvas.getContext('2d',{alpha:false}),shade=document.querySelector('#shade'),body=document.querySelector('#dialog-body');
+let store;try{store=localStorage}catch{store=null}
+let state=loadState(store),clock=0,last=0,camera={x:0,y:0,scale:1},drag=null,hover=null,paused=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const WORLD={w:1280,h:800};let currentDialog=null;
+const people=CREW.map((a,i)=>({a,x:a.home.x,y:a.home.y,tx:a.home.x,ty:a.home.y,walk:0,direction:1,phase:i*1.75,rest:i*1.6}));
+const color=(c)=>{ctx.fillStyle=c}, rect=(x,y,w,h,c)=>{color(c);ctx.fillRect(Math.round(x/2)*2,Math.round(y/2)*2,Math.round(w/2)*2,Math.round(h/2)*2)};
+const stroke=(x,y,w,h,c,line=4)=>{rect(x,y,w,line,c);rect(x,y+h-line,w,line,c);rect(x,y,line,h,c);rect(x+w-line,y,line,h,c)};
+const label=(s,x,y,size=12,c='#f7e6c1',align='left')=>{ctx.fillStyle=c;ctx.font='bold '+size+'px monospace';ctx.textAlign=align;ctx.fillText(s,x,y);ctx.textAlign='left'};
+const esc=s=>String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','"':'&#39;'}[ch]));
+const personColor=id=>getCrew(id)?.color||'#aaa';
+function floor(){
+  rect(0,0,WORLD.w,WORLD.h,'#242a3b');
+  rect(0,82,1280,718,'#635567');
+  for(let y=84;y<800;y+=40)for(let x=0;x<1280;x+=40){
+    rect(x,y,38,38,(Math.floor(x/40)+Math.floor(y/40))%2?'#615565':'#675a69');
+    rect(x+3,y+3,3,3,'#706478');
+  }
+  rect(0,0,1280,90,'#30374e');rect(0,72,1280,16,'#ab8b81');rect(0,85,1280,8,'#493949');
+  for(const x of [78,371,665,958]){
+    rect(x,8,208,56,'#344a68');stroke(x,8,208,56,'#bc9ea2',7);
+    rect(x+92,8,6,56,'#b8b4bd');rect(x,33,208,5,'#b8b4bd');
+    rect(x+14,14,52,16,'#6d91a5');rect(x+143,43,48,12,'#779bb2');
+  }
+  // pixel rugs: paths center on both office rows
+  rect(26,173,1225,510,'#554e63');rect(38,186,1202,485,'#6d5a6e');
+  for(let x=40;x<1240;x+=28){rect(x,186,12,4,'#ae8b82');rect(x,668,12,4,'#ae8b82')}
+  rect(38,387,1202,66,'#7c6171');
+  for(let x=50;x<1230;x+=44)rect(x,414,20,5,'#9a7480');
+  // room separators and plants
+  for(const x of [400,830]){rect(x,103,9,247,'#453c57');rect(x+4,103,5,30,'#96768d');rect(x,477,9,221,'#453c57')}
+  for(const x of [28,1252])for(const y of [140,473])plant(x,y);
+  label('MIN D STUDIO  /  YOUR LITTLE AI OFFICE',640,118,14,'#ebd8ba','center');
+}
+function plant(x,y){
+ rect(x-17,y+18,34,25,'#b47768');stroke(x-17,y+18,34,25,'#6a4c5b',4);
+ for(const [dx,dy] of [[-15,2],[14,0],[-9,-16],[8,-20],[0,-29]])rect(x+dx-8,y+dy-5,19,22,'#5e9b83');
+ for(const [dx,dy] of [[-10,-8],[8,-12],[0,-24]])rect(x+dx-6,y+dy-4,14,15,'#8ac89b');
+}
+function monitor(x,y,c='#8fd3e0'){
+ rect(x,y,75,44,'#2c2b43');stroke(x,y,75,44,'#252338',5);rect(x+7,y+7,61,30,'#405a6c');
+ rect(x+14,y+15,21,4,c);rect(x+14,y+24,34,3,'#aac2cc');rect(x+51,y+15,9,16,'#577d9b');
+ rect(x+32,y+44,12,7,'#3a344b');rect(x+19,y+51,38,5,'#3a344b');
+}
+function desk(a){
+ const {x,y}=a.station,lower=y>400;
+ // shadow, chair, desk, decorative details
+ rect(x-108,y+39,226,9,'#362e49');
+ rect(x-91,y-45,185,101,'#5a3d4a');rect(x-86,y-51,185,96,'#aa7967');stroke(x-86,y-51,185,96,'#49384d',7);
+ rect(x-70,y-37,153,58,'#c49b7a');rect(x-62,y-32,32,6,'#e8be91');
+ monitor(x-31,y-40,a.color);
+ rect(x+57,y-32,18,24,'#e4d6ba');rect(x+59,y-30,14,3,a.color);
+ rect(x-16,y+24,66,12,'#655565');rect(x-3,y+33,44,8,'#45405c');
+ rect(x-38,y+49,73,51,'#45415b');rect(x-31,y+55,59,39,'#77738c');
+ stroke(x-38,y+49,73,51,'#2b2d41',5);
+ label(a.name.toUpperCase(),x+8,y-63,15,'#fff2cf','center');
+ label(a.team.toUpperCase(),x+8,y+120,11,'#f5e0c7','center');
+ if(lower){rect(x-105,y+146,210,5,'#a17878')}
+}
+function missionBoard(){
+ rect(479,110,316,78,'#3b344b');stroke(479,110,316,78,'#d2a17b',7);
+ rect(491,121,292,55,'#263e4b');label('✦ MISSION BOARD ✦',637,144,19,'#f6d692','center');
+ label('CLICK TO ASSIGN / REVIEW',637,166,11,'#bbd1cf','center');
+ rect(497,185,10,10,'#dbac79');rect(763,185,10,10,'#dbac79');
+}
+function lamp(x,y){rect(x-16,y-15,32,12,'#edc47e');rect(x-24,y-4,48,8,'#aa806d');rect(x-9,y-31,18,18,'#faf0b8');rect(x-7,y-30,14,9,'#fff4d4')}
+function worldScene(){
+ floor();
+ rect(50,125,335,238,'#5b4d64');stroke(50,125,335,238,'#8e7181',6);
+ rect(423,125,382,238,'#555567');stroke(423,125,382,238,'#a18394',6);
+ rect(845,125,381,238,'#595268');stroke(845,125,381,238,'#987f8e',6);
+ rect(51,466,348,253,'#5e596c');stroke(51,466,348,253,'#977887',6);
+ rect(421,466,400,253,'#57526c');stroke(421,466,400,253,'#977887',6);
+ rect(839,466,384,253,'#5e5467');stroke(839,466,384,253,'#977887',6);
+ // pinboards and room labels
+ const rooms=[['STRATEGY',217,170],['EVIDENCE LAB',489,170],['CONTENT + MEDIA',1032,170],['QUALITY LAB',272,510],['ENGINEERING',627,510],['REPORT ARCHIVE',993,510]];
+ for(const [s,x,y] of rooms){rect(x-89,y-15,180,24,'#302f48');label(s,x,y+1,12,'#e3bb91','center')}
+ rect(60,732,1160,48,'#3c374f');label('AGENT OFFICE  ·  CLICK CHARACTER / BOARD  ·  NO API / NO FAKE AI',640,761,13,'#dac9aa','center');
+ missionBoard();
+ for(const a of CREW)desk(a);
+ lamp(408,416);lamp(832,416);
+ for(const p of people)drawPerson(p);
+}
+function drawPerson(p){
+ let {x,y,a}=p;
+ const moving=Math.abs(p.tx-x)+Math.abs(p.ty-y)>2;
+ const bob=moving?Math.sin(p.walk*12)*3:Math.sin(clock*1.3+p.phase)*1.2;
+ x=Math.round(x/2)*2;y=Math.round((y+bob)/2)*2;
+ // shadow
+ rect(x-21,y+27,44,8,'#33283d');
+ const step=moving?Math.sin(p.walk*12)*6:0;
+ rect(x-18,y+14,15,16+step,'#413647');rect(x+4,y+14,15,16-step,'#413647');
+ rect(x-19,y+27+step,16,8,'#2b2b44');rect(x+5,y+27-step,16,8,'#2b2b44');
+ rect(x-25,y-19,50,44,a.color);rect(x-20,y-13,40,29,'#e9d9d8');
+ rect(x-31,y-13,11,27,a.color);rect(x+20,y-13,11,27,a.color);
+ rect(x-11,y-42,23,24,a.skin);rect(x-24,y-80,49,51,a.hair);
+ rect(x-28,y-65,56,38,a.skin);
+ rect(x-28,y-84,56,25,a.hair);rect(x-28,y-66,13,21,a.hair);rect(x+18,y-65,10,17,a.hair);
+ rect(x-14,y-51,7,8,'#2e344d');rect(x+9,y-51,7,8,'#2e344d');rect(x-4,y-39,11,3,'#d98083');
+ rect(x-17,y-38,9,4,'#eda2a4');rect(x+11,y-38,9,4,'#eda2a4');
+ if(a.accessory==='glasses'){rect(x-19,y-56,17,14,'#38374e');rect(x+3,y-56,17,14,'#38374e');rect(x-16,y-53,11,8,'#d6e6da');rect(x+6,y-53,11,8,'#d6e6da');rect(x-2,y-53,6,3,'#38374e')}
+ if(a.accessory==='crown'){rect(x-18,y-88,36,9,'#ead18e');rect(x-16,y-97,7,10,'#ead18e');rect(x-1,y-101,7,14,'#ead18e');rect(x+12,y-96,6,10,'#ead18e')}
+ if(a.accessory==='beret'){rect(x-31,y-88,54,12,'#b35386');rect(x-16,y-97,34,13,'#c86d91')}
+ if(a.accessory==='headphones'||a.accessory==='headset'){rect(x-31,y-67,9,28,'#3c3e5e');rect(x+24,y-67,9,28,'#3c3e5e');rect(x-19,y-90,37,8,'#4f536f')}
+ if(a.accessory==='clipboard'){rect(x+19,y-10,19,23,'#e5d7c3');rect(x+24,y-7,12,3,'#7cb9a2')}
+ const mission=state.missions.find(m=>m.stages.some(s=>s.agentId===a.id && readyStages(m).some(r=>r.id===s.id)));
+ if(mission){rect(x+19,y-107,13,13,'#ffdf8a');label('!',x+25,y-96,12,'#3a2e49','center')}
+ const isHover=hover===a.id;
+ if(isHover){stroke(x-40,y-116,80,153,'#f5d795',3);label(a.name,x,y-121,15,'#fff8db','center')}
+}
+function resize(){
+ const dpr=Math.min(window.devicePixelRatio||1,2);
+ canvas.width=Math.round(innerWidth*dpr);canvas.height=Math.round(innerHeight*dpr);
+ const minScale=Math.min(innerWidth/1280,innerHeight/800);
+ camera.scale=Math.max(minScale,Math.min(1.5,innerHeight/780));
+ if(innerWidth<700)camera.scale=Math.max(.72,innerHeight/820);
+ camera.x=(innerWidth-1280*camera.scale)/2;camera.y=(innerHeight-800*camera.scale)/2;
+}
+window.addEventListener('resize',resize);resize();
+function toWorld(clientX,clientY){return {x:(clientX-camera.x)/camera.scale,y:(clientY-camera.y)/camera.scale}}
+function hit(x,y){
+ if(x>475&&x<805&&y>106&&y<201)return {type:'mission'};
+ for(let i=people.length-1;i>=0;i--){const p=people[i];if(Math.abs(x-p.x)<49&&y>p.y-116&&y<p.y+52)return {type:'agent',id:p.a.id}}
+ return null;
+}
+function target(p,x,y){p.tx=Math.max(65,Math.min(1210,x));p.ty=Math.max(205,Math.min(704,y))}
+function tick(t){
+ const dt=Math.min(.05,(t-last)/1000||.016);last=t;if(!paused)clock+=dt;
+ for(const p of people){
+  if(!paused){
+   const dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy);
+   if(d>3){const step=Math.min(d,dt*70);p.x+=dx/d*step;p.y+=dy/d*step;p.walk+=dt;p.direction=dx>=0?1:-1;}
+   else{p.rest+=dt;if(p.rest>7+(p.phase%5)){p.rest=0;const active=state.missions.some(m=>readyStages(m).some(s=>s.agentId===p.a.id));target(p,active?p.a.walkTo.x:p.a.home.x+(Math.sin(clock+p.phase)*35),active?p.a.walkTo.y:p.a.home.y+(Math.cos(clock*.8+p.phase)*12));}}
+  }
+ }
+ ctx.setTransform(1,0,0,1,0,0);rect(0,0,canvas.width,canvas.height,'#151a2c');
+ const dpr=canvas.width/innerWidth;ctx.setTransform(dpr*camera.scale,0,0,dpr*camera.scale,dpr*camera.x,dpr*camera.y);
+ ctx.imageSmoothingEnabled=false;worldScene();requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+function toast(text){const n=document.querySelector('#notice');n.textContent=text;n.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>n.classList.remove('show'),3400)}
+function show(html,kind='panel'){body.innerHTML=html;shade.classList.add('open');shade.setAttribute('aria-hidden','false');currentDialog=kind;document.querySelector('#close').focus()}
+function hide(){shade.classList.remove('open');shade.setAttribute('aria-hidden','true');currentDialog=null;canvas.focus()}
+document.querySelector('#close').onclick=hide;
+shade.addEventListener('click',e=>{if(e.target===shade)hide()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
+const chip=a=>'<span class="chip">'+esc(a)+'</span>';
+function showAgent(id){
+ const a=getCrew(id);if(!a)return;
+ const jobs=state.missions.flatMap(m=>m.stages.filter(s=>s.agentId===a.id).map(s=>({m,s})));
+ const next=jobs.find(({m,s})=>readyStages(m).some(x=>x.id===s.id));
+ const html='<h2>'+esc(a.name)+' — '+esc(a.team)+'</h2><div class="sub">'+esc(a.title)+'</div><p>'+esc(a.mission)+'</p><h3>SKILLS / CAPABILITIES</h3><div class="skill-list">'+a.skills.map(chip).join('')+'</div><h3>OUTPUT CONTRACT</h3><p>'+esc(a.output)+'</p><div class="note">'+esc(a.restrictions)+'</div><h3>MISSION ASSIGNMENTS</h3><p>'+jobs.length+' stage · '+jobs.filter(j=>j.s.status==='done').length+' có kết quả thực.</p>'+
+ (next?'<div class="mission"><strong>'+esc(next.m.brief.slice(0,160))+'</strong><p>'+esc(next.s.title)+'</p><button class="action primary" data-cmd="stage" data-mid="'+esc(next.m.id)+'" data-sid="'+esc(next.s.id)+'">Mở nhiệm vụ sẵn sàng</button></div>':'<div class="note">Chưa có nhiệm vụ sẵn sàng. Click bảng MISSION trong văn phòng để giao việc.</div>')+
+ '<button class="action" data-cmd="board">Xem Mission Board</button>';
+ target(people.find(p=>p.a.id===id),a.walkTo.x,a.walkTo.y);
+ show(html,'agent');
+}
+function renderBoard(){
+ const list=state.missions.slice().reverse();
+ show('<h2>✦ MISSION BOARD</h2><div class="sub">Mọi công việc đều hiển thị ngay trong thế giới RPG. Chế độ NO API · Work handoff.</div><div class="note">Website không thể tự trừ credit ChatGPT hoặc gọi model của tài khoản. Bạn có thể copy prompt vào ChatGPT Work rồi dán kết quả thực trở lại.</div><h3>GIAO NHIỆM VỤ MỚI</h3><textarea id="brief" maxlength="4000" placeholder="Ví dụ: Viết kịch bản và tạo thumbnail TikTok về BOS/CHoCH, có nghiên cứu và QC..."></textarea><button class="action primary" data-cmd="create">Tạo mission & phân team</button><h3>MISSION HISTORY ('+list.length+')</h3>'+
+ (list.map(m=>{const q=getMissionStats(m);return '<div class="mission"><strong>'+esc(m.brief.slice(0,160))+'</strong><p>'+q.done+'/'+q.total+' stages · '+q.percent+'% có kết quả thật</p><small>'+new Date(m.createdAt).toLocaleString('vi-VN')+'</small><div><button class="action" data-cmd="mission" data-mid="'+esc(m.id)+'">Mở nhiệm vụ</button></div></div>'}).join('')||'<p>Chưa có mission. Nhập brief để Nova phân công.</p>'), 'board');
+}
+function renderMission(id){
+ const m=state.missions.find(x=>x.id===id);if(!m)return renderBoard();
+ const q=getMissionStats(m);
+ show('<h2>MISSION · '+q.percent+'% Verified</h2><p>'+esc(m.brief)+'</p><div class="note">Trạng thái DONE chỉ được tạo khi có kết quả thực được đưa về. Agent đi lại trên map là animation của game, không phải dấu hiệu model đang chạy.</div><h3>WORKFLOW / HANDOFF</h3>'+
+ m.stages.map(s=>{
+ const a=getCrew(s.agentId),ready=readyStages(m).some(p=>p.id===s.id);
+ const status=s.status==='done'?'✓ Đã lưu kết quả':ready?'● Có thể thực hiện':'○ Chờ đầu vào';
+ return '<div class="step"><div><strong style="color:'+a.color+'">'+esc(a.name)+'</strong> · '+esc(s.title)+'<div class="meta">'+status+'</div></div>'+(ready?'<button class="action" data-cmd="stage" data-mid="'+esc(m.id)+'" data-sid="'+esc(s.id)+'">Giao việc</button>':s.status==='done'?'<button class="action" data-cmd="result" data-mid="'+esc(m.id)+'" data-sid="'+esc(s.id)+'">Kết quả</button>':'')+'</div>'
+ }).join('')+'<button class="action" data-cmd="board">← Mission Board</button>','mission');
+}
+function renderStage(mid,sid){
+ const m=state.missions.find(x=>x.id===mid),s=m?.stages.find(x=>x.id===sid);if(!s)return;
+ const a=getCrew(s.agentId),prompt=buildWorkPrompt(m,sid);
+ show('<h2>'+esc(a.name)+' · '+esc(s.title)+'</h2><p>'+esc(a.mission)+'</p><h3>CHATGPT WORK HANDOFF</h3><p>Copy prompt vào cuộc hội thoại ChatGPT Work của bạn. Sau khi model trả kết quả, dán nguyên phần deliverable vào bên dưới để mở khóa bước tiếp theo.</p><button class="action primary" data-cmd="copy" data-mid="'+esc(mid)+'" data-sid="'+esc(sid)+'">Copy prompt cho ChatGPT Work</button><button class="action" data-cmd="open-work">Mở ChatGPT</button><h3>GHI NHẬN OUTPUT THỰC</h3><textarea id="stage-result" maxlength="40000" placeholder="Dán output được tạo và kiểm chứng từ ChatGPT Work tại đây..."></textarea><button class="action primary" data-cmd="complete" data-mid="'+esc(mid)+'" data-sid="'+esc(sid)+'">Lưu kết quả · Mở khóa bước tiếp</button><button class="action" data-cmd="mission" data-mid="'+esc(mid)+'">← Mission</button>','stage');
+}
+function renderResult(mid,sid){const m=state.missions.find(x=>x.id===mid),s=m?.stages.find(x=>x.id===sid);if(!s)return;show('<h2>'+esc(getCrew(s.agentId).name)+' · Kết quả đã ghi nhận</h2><div class="note">'+esc(s.title)+'</div><p style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(s.result)+'</p><button class="action" data-cmd="mission" data-mid="'+esc(mid)+'">← Mission</button>')}
+body.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-cmd]');if(!b)return;const {cmd,mid,sid}=b.dataset;
+ if(cmd==='board')return renderBoard();
+ if(cmd==='mission')return renderMission(mid);
+ if(cmd==='stage')return renderStage(mid,sid);
+ if(cmd==='result')return renderResult(mid,sid);
+ if(cmd==='open-work'){window.open('https://chatgpt.com/','_blank','noopener,noreferrer');return}
+ if(cmd==='create'){try{const m=createMission(document.querySelector('#brief').value);state={...state,missions:[m,...state.missions].slice(0,100)};if(!saveState(store,state))toast('Không lưu được localStorage: dữ liệu chỉ có trong phiên này.');target(people[0],CREW[0].walkTo.x,CREW[0].walkTo.y);renderMission(m.id)}catch(err){toast(err.message)}return}
+ if(cmd==='copy'){
+  const m=state.missions.find(x=>x.id===mid),text=buildWorkPrompt(m,sid);
+  try{await navigator.clipboard.writeText(text);toast('Đã copy prompt. Dán vào ChatGPT Work.')}catch{const field=document.createElement('textarea');field.value=text;body.appendChild(field);field.select();toast('Clipboard không khả dụng; hãy copy văn bản vừa hiển thị.')}
+  return;
+ }
+ if(cmd==='complete'){
+  const text=document.querySelector('#stage-result')?.value||'';
+  try{state={...state,missions:state.missions.map(m=>m.id===mid?completeStage(m,sid,text):m)};if(!saveState(store,state))toast('Lưu trữ bị chặn.');toast('Đã lưu kết quả; stage tiếp theo đã mở khóa.');renderMission(mid)}catch(err){toast(err.message)}
+ }
+});
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);drag={x:e.clientX,y:e.clientY,ox:camera.x,oy:camera.y,moved:false}});
+canvas.addEventListener('pointermove',e=>{
+ const p=toWorld(e.clientX,e.clientY);hover=hit(p.x,p.y)?.id||null;
+ canvas.style.cursor=hover?'pointer':'grab';
+ if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>7)drag.moved=true;if(drag.moved){camera.x=drag.ox+dx;camera.y=drag.oy+dy;}}
+});
+canvas.addEventListener('pointerup',e=>{
+ if(!drag)return;const didDrag=drag.moved;drag=null;if(didDrag)return;
+ const p=toWorld(e.clientX,e.clientY),h=hit(p.x,p.y);
+ if(h?.type==='agent')showAgent(h.id);
+ if(h?.type==='mission')renderBoard();
+});
+canvas.addEventListener('wheel',e=>{
+ e.preventDefault();const p=toWorld(e.clientX,e.clientY),delta=e.deltaY<0?1.08:.92;camera.scale=Math.max(.55,Math.min(2,camera.scale*delta));camera.x=e.clientX-p.x*camera.scale;camera.y=e.clientY-p.y*camera.scale
+},{passive:false});
 </script>
-</body></html>
+</body>
+</html>

@@ -1,3 +1,20 @@
+# MinD Agent Office V3 — Fullscreen Pixel RPG
+
+**Full viewport = the office game world.** No sidebar or top navigation. Seven interactive characters inhabit the office: Nova (BD), Ivy (Research), Momo (Content), Lumi (Media), Ada (Optimize), Byte (Dev), Kai (Report).
+
+Open `index.html` in a modern browser or run `npm start`. Click a character to inspect their scope and task, or click the pixel **MISSION BOARD** at the top center of the game to submit a brief. Pan by dragging and zoom with the mouse wheel. Work stages are written to browser localStorage.
+
+**No OpenAI API is called by this V3 interface.** Mission routing and character movement are local; no false AI response or simulated output is marked complete. Use each stage's **Copy prompt for ChatGPT Work** action to run the actual task in your authorized ChatGPT Work session, then paste verified results back into the game. ChatGPT account credits cannot be used automatically by a standalone deployed website without an officially supported integration. This prototype does not assume such permission or use cookies/session-token hacks.
+
+- Agent roster and pixel positions: [src/crew-v3.mjs](src/crew-v3.mjs)
+- Mission routing and dependency engine: [src/mission-v3.mjs](src/mission-v3.mjs)
+- Seven character skills: [skills/](skills/) and [AGENTS.md](AGENTS.md)
+- Product / technical scope: [docs/PIXEL_RPG_V3.md](docs/PIXEL_RPG_V3.md)
+
+**Verification:** `npm test` and `npm run check`. Browser smoke verification for desktop/mobile is additionally required. Legacy `api/agent.js` remains in the repository for V2 compatibility but is not invoked by V3.
+
+---
+
 # MinD Agent Office V2.0 ✳
 
 Mission-driven chibi AI Office with **six specialized roles** (Nova CEO, Ivy Research, Ada BA, Momo Creative, Byte Developer, Kai Operations).
