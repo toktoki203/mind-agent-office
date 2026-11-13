@@ -1,14 +1,14 @@
 {
   "name": "mind-agent-office",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "Mission-driven multi-agent office with live AI and standalone demo",
+  "description": "Fullscreen pixel RPG office with seven Work-handoff roles and no API inference",
   "scripts": {
     "start": "node scripts/serve.mjs",
     "dev": "node scripts/serve.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check api/agent.js && node --check scripts/serve.mjs"
+    "check": "node --check api/agent.js && node --check scripts/serve.mjs && node --check src/crew-v3.mjs && node --check src/mission-v3.mjs && node scripts/check-pixel-office.mjs"
   },
   "engines": {
     "node": ">=20"
