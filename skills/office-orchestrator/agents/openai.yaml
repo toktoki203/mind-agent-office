@@ -1,0 +1,4 @@
+interface:
+  display_name: "MinD Office Orchestrator"
+  short_description: "Route and verify seven-agent missions in ChatGPT Work"
+  brand_color: "#A18BD6"
